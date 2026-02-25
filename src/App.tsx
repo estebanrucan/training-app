@@ -328,7 +328,7 @@ export default function App() {
   );
 
   return (
-    <div className="h-screen w-full max-w-md mx-auto bg-zinc-950 text-white overflow-hidden font-sans selection:bg-indigo-500/30">
+    <div className="h-[100dvh] w-full max-w-[412px] mx-auto bg-zinc-950 text-white overflow-hidden font-sans selection:bg-indigo-500/30">
       <AnimatePresence mode="wait">
         {screen === 'home' && renderHome()}
         {screen === 'countdown' && renderCountdown()}
