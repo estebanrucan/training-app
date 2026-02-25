@@ -1,0 +1,5 @@
+{
+  "name": "Entrenamiento Fuerza",
+  "description": "App de seguimiento de rutinas de fuerza (Tren Superior/Inferior) con temporizadores y alarmas.",
+  "requestFramePermissions": []
+}
