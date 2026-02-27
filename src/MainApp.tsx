@@ -350,41 +350,40 @@ export default function MainApp() {
                     </div>
                 </div>
 
-                <div className="flex-1 p-6 flex flex-col justify-center relative z-30 pb-52">
+                <div className="flex-1 px-5 pt-2 pb-28 flex flex-col justify-center relative z-30">
                     {step.type === 'exercise' ? (
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center text-sm font-bold text-yellow-400 tracking-wide">
                                     <span className="bg-yellow-500/10 px-3 py-1 rounded-full border border-yellow-500/20">{step.block}</span>
                                     <span className="text-zinc-400 px-3 py-1">{step.seriesInfo}</span>
                                 </div>
-                                <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight drop-shadow-lg flex items-center justify-between">
+                                <h2 className="text-3xl font-black text-white leading-tight tracking-tight drop-shadow-lg flex items-center justify-between">
                                     {step.title}
                                 </h2>
                             </div>
 
-                            {/* Interactive Stats Cards */}
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-3">
                                 <button
                                     onClick={openEditSheet}
-                                    className="bg-white/5 backdrop-blur-xl rounded-[2rem] p-5 text-left border border-white/10 relative overflow-hidden group hover:bg-white/10 active:scale-95 transition-all flex flex-col justify-center h-32"
+                                    className="bg-white/5 backdrop-blur-xl rounded-[1.5rem] p-4 text-left border border-white/10 relative overflow-hidden group hover:bg-white/10 active:scale-95 transition-all flex flex-col justify-center h-24"
                                 >
                                     <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Edit2 className="w-4 h-4 text-zinc-400" />
                                     </div>
                                     <div className="text-zinc-500 text-xs font-bold tracking-widest uppercase mb-1">Repeticiones</div>
-                                    <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter">
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-3xl font-black text-white tracking-tighter">
                                             {(modifiedSteps[stepIndex]?.reps || step.reps).replace(/reps?/i, '').trim()}
                                         </span>
-                                        <span className="text-zinc-400 font-bold text-sm">reps</span>
+                                        <span className="text-zinc-400 font-bold text-xs">reps</span>
                                     </div>
                                 </button>
 
                                 {(modifiedSteps[stepIndex]?.weight || step.weight) ? (
                                     <button
                                         onClick={openEditSheet}
-                                        className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-5 text-left relative overflow-hidden group hover:border-yellow-500/50 active:scale-95 transition-all flex flex-col justify-center h-32 shadow-xl"
+                                        className="bg-zinc-900 border border-zinc-800 rounded-[1.5rem] p-4 text-left relative overflow-hidden group hover:border-yellow-500/50 active:scale-95 transition-all flex flex-col justify-center h-24 shadow-xl"
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent pointer-events-none" />
                                         <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -398,20 +397,20 @@ export default function MainApp() {
                                                 if (parts.length === 3 && parts[0].includes('x')) {
                                                     return (
                                                         <>
-                                                            <span className="text-zinc-400 font-bold text-xl">{parts[0]}</span>
-                                                            <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter">{parts[1]}</span>
-                                                            <span className="text-zinc-400 font-bold text-sm">{parts[2]}</span>
+                                                            <span className="text-zinc-400 font-bold text-lg">{parts[0]}</span>
+                                                            <span className="text-3xl font-black text-white tracking-tighter">{parts[1]}</span>
+                                                            <span className="text-zinc-400 font-bold text-xs">{parts[2]}</span>
                                                         </>
                                                     );
                                                 } else if (parts.length === 2) {
                                                     return (
                                                         <>
-                                                            <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter">{parts[0]}</span>
-                                                            <span className="text-zinc-400 font-bold text-sm">{parts[1]}</span>
+                                                            <span className="text-3xl font-black text-white tracking-tighter">{parts[0]}</span>
+                                                            <span className="text-zinc-400 font-bold text-xs">{parts[1]}</span>
                                                         </>
                                                     );
                                                 } else {
-                                                    return <span className="text-3xl font-black text-white tracking-tighter leading-tight break-words">{w}</span>;
+                                                    return <span className="text-2xl font-black text-white tracking-tighter leading-tight break-words">{w}</span>;
                                                 }
                                             })()}
                                         </div>
@@ -421,11 +420,11 @@ export default function MainApp() {
                                 )}
                             </div>
 
-                            <div className="bg-yellow-950/20 backdrop-blur-md rounded-3xl p-6 border border-yellow-500/20 shadow-inner">
-                                <div className="text-yellow-400 text-sm mb-2 font-bold uppercase tracking-wider flex items-center gap-2">
-                                    <AlertCircle className="w-4 h-4" /> Tips
+                            <div className="bg-yellow-950/20 backdrop-blur-md rounded-2xl p-4 border border-yellow-500/20 shadow-inner">
+                                <div className="text-yellow-400 text-xs mb-1 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                    <AlertCircle className="w-3.5 h-3.5" /> Tips
                                 </div>
-                                <p className="text-yellow-100/90 text-lg leading-relaxed">{step.notes}</p>
+                                <p className="text-yellow-100/90 text-sm leading-snug">{step.notes}</p>
                             </div>
 
                             {step.muscles && step.muscles.length > 0 && (
@@ -435,7 +434,7 @@ export default function MainApp() {
                                         {step.muscles.map((muscle: any, idx: number) => (
                                             <div
                                                 key={idx}
-                                                className={`px-4 py-2 rounded-2xl text-sm font-bold border flex items-center gap-2 backdrop-blur-md
+                                                className={`px-3 py-1.5 rounded-xl text-xs font-bold border flex items-center gap-1.5 backdrop-blur-md
                           ${muscle.type === 'primary'
                                                         ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                                                         : 'bg-white/5 text-zinc-300 border-white/10'
@@ -451,7 +450,7 @@ export default function MainApp() {
 
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center space-y-6 text-center h-full">
+                        <div className="flex flex-col items-center justify-center space-y-6 text-center h-full my-auto">
                             <div className="relative">
                                 {/* Timer background effects */}
                                 <div className="absolute inset-0 rounded-full bg-yellow-400 blur-3xl opacity-10 animate-pulse" />
@@ -485,10 +484,10 @@ export default function MainApp() {
                 </div>
 
                 {/* Main Action Button - Floating at bottom */}
-                <div className="fixed bottom-0 left-0 w-full p-6 z-40 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pb-8">
+                <div className="fixed bottom-0 left-0 w-full p-5 z-40 bg-gradient-to-t from-zinc-950 via-zinc-950/90 to-transparent pb-6">
                     <button
                         onClick={advanceStep}
-                        className="w-full h-20 bg-white text-black rounded-3xl font-black text-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all shadow-[0_10px_40px_rgba(255,255,255,0.15)] overflow-hidden relative group"
+                        className="w-full h-16 bg-yellow-400 text-zinc-950 rounded-2xl font-black text-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-lg overflow-hidden relative group"
                     >
                         {step.type === 'exercise' ? (
                             <>
