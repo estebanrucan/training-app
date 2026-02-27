@@ -31,7 +31,7 @@ for (let i = 1; i <= 3; i++) {
     muscles: [{ name: 'Pectoral Superior', percentage: 60, type: 'primary' }, { name: 'Deltoides Anterior', percentage: 25, type: 'secondary' }, { name: 'Tríceps', percentage: 15, type: 'secondary' }]
   });
   trenSuperior.push({
-    type: 'exercise', title: 'Remo Invertido en TRX', reps: '10-12 reps', weight: 'Peso corporal', notes: 'Mantén el cuerpo recto como una tabla. Tira hasta que tu pecho toque las manillas. Ajusta la inclinación para mayor dificultad.', block: 'Bloque 1: Pecho Alto y Espalda', seriesInfo: `Serie ${i} de 3`,
+    type: 'exercise', title: 'Remo Invertido en TRX', reps: '10 reps', notes: 'Mantén el cuerpo recto como una tabla. Tira hasta que tu pecho toque las manillas. Ajusta la inclinación para mayor dificultad.', block: 'Bloque 1: Pecho Alto y Espalda', seriesInfo: `Serie ${i} de 3`,
     muscles: [{ name: 'Dorsal Ancho', percentage: 60, type: 'primary' }, { name: 'Trapecio y Romboides', percentage: 30, type: 'secondary' }, { name: 'Bíceps', percentage: 10, type: 'secondary' }]
   });
   if (i < 3) trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Press de banca inclinado' });
@@ -41,8 +41,8 @@ trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Flexiones en TRX'
 // Bloque 2
 for (let i = 1; i <= 3; i++) {
   trenSuperior.push({
-    type: 'exercise', title: 'Flexiones en TRX', reps: '8-10 reps', weight: 'Peso corporal', notes: 'Baja más allá del nivel de tus manos para un estiramiento profundo del pecho. Mantén el core firme para evitar arquear la zona lumbar.', block: 'Bloque 2: Pecho Medio y Espalda', seriesInfo: `Serie ${i} de 3`,
-    muscles: [{ name: 'Pectoral Mayor', percentage: 70, type: 'primary' }, { name: 'Tríceps', percentage: 20, type: 'secondary' }, { name: 'Core y Estabilizadores', percentage: 10, type: 'secondary' }]
+    type: 'exercise', title: 'Flexiones en TRX', reps: '8 reps', notes: 'Baja más allá del nivel de tus manos para un estiramiento profundo. Mantén el core firme para evitar arquear la zona lumbar.', block: 'Bloque 2: Pecho Medio y Espalda', seriesInfo: `Serie ${i} de 3`,
+    muscles: [{ name: 'Pectoral Mayor', percentage: 70, type: 'primary' }, { name: 'Tríceps', percentage: 20, type: 'secondary' }, { name: 'Core', percentage: 10, type: 'secondary' }]
   });
   trenSuperior.push({
     type: 'exercise', title: 'Remo inclinado con mancuernas', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Espalda recta paralela al suelo. Jala los codos hacia la cadera, sin dar tirones con el torso.', block: 'Bloque 2: Pecho Medio y Espalda', seriesInfo: `Serie ${i} de 3`,
@@ -59,7 +59,7 @@ for (let i = 1; i <= 3; i++) {
     muscles: [{ name: 'Bíceps', percentage: 60, type: 'primary' }, { name: 'Braquiorradial', percentage: 30, type: 'secondary' }, { name: 'Flexores del Antebrazo', percentage: 10, type: 'secondary' }]
   });
   trenSuperior.push({
-    type: 'exercise', title: 'Extensiones de Tríceps en TRX', reps: '10-12 reps', weight: 'Peso corporal', notes: 'Codos apuntando al frente, lleva las manos hacia tu frente o por encima de la cabeza. Extiende contrayendo fuerte el tríceps.', block: 'Bloque 3: Brazos', seriesInfo: `Serie ${i} de 3`,
+    type: 'exercise', title: 'Extensiones de Tríceps en TRX', reps: '10 reps', notes: 'Codos apuntando al frente, lleva las manos hacia tu frente. Extiende contrayendo fuerte el tríceps.', block: 'Bloque 3: Brazos', seriesInfo: `Serie ${i} de 3`,
     muscles: [{ name: 'Tríceps', percentage: 85, type: 'primary' }, { name: 'Core', percentage: 15, type: 'secondary' }]
   });
   if (i < 3) trenSuperior.push({ type: 'rest', duration: 45, nextExercise: 'Curl de Bíceps' });
