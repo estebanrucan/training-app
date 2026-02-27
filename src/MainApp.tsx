@@ -413,10 +413,10 @@ export default function MainApp() {
                     </div>
                 </div>
 
-                <div className="flex-1 px-5 pt-3 pb-36 flex flex-col relative z-30 overflow-y-auto custom-scrollbar">
+                <div className="flex-1 px-5 pt-3 pb-32 flex flex-col relative z-30 overflow-y-auto custom-scrollbar">
                     {step.type === 'exercise' ? (
-                        <div className="space-y-6">
-                            {/* Block & Series info */}
+                        <div className="flex flex-col flex-1 gap-5 justify-between">
+                            {/* Block & Series info + Title */}
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center">
                                     <span className="text-xs font-bold text-yellow-400 bg-yellow-500/10 px-3 py-1.5 rounded-xl border border-yellow-500/15 tracking-wide">{step.block}</span>
@@ -483,7 +483,7 @@ export default function MainApp() {
                             </div>
 
                             {/* Tips */}
-                            <div className="bg-gradient-to-br from-yellow-950/30 to-yellow-950/10 backdrop-blur-md rounded-2xl p-5 border border-yellow-500/15 min-h-[100px]">
+                            <div className="bg-gradient-to-br from-yellow-950/30 to-yellow-950/10 backdrop-blur-md rounded-2xl p-5 border border-yellow-500/15">
                                 <div className="text-yellow-400/80 text-[10px] mb-2 font-bold uppercase tracking-[0.15em] flex items-center gap-2">
                                     <Zap className="w-3.5 h-3.5" /> Técnica
                                 </div>
