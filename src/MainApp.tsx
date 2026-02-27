@@ -9,8 +9,8 @@ type Screen = 'home' | 'countdown' | 'workout' | 'done';
 // Background animated component for the "World-Class" feel
 const BackgroundGlow = () => (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full mix-blend-screen filter blur-[100px] animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-purple-600/20 rounded-full mix-blend-screen filter blur-[120px] animate-pulse" style={{ animationDuration: '10s' }} />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-yellow-500/20 rounded-full mix-blend-screen filter blur-[100px] animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-yellow-600/20 rounded-full mix-blend-screen filter blur-[120px] animate-pulse" style={{ animationDuration: '10s' }} />
     </div>
 );
 
@@ -219,7 +219,7 @@ export default function MainApp() {
             <div className="flex flex-col items-center justify-center p-8 pt-16 space-y-3 z-10">
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }}
-                    className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-indigo-500/30 mb-4"
+                    className="w-20 h-20 rounded-3xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-2xl shadow-yellow-500/30 mb-4"
                 >
                     <Activity className="w-10 h-10 text-white" />
                 </motion.div>
@@ -237,7 +237,7 @@ export default function MainApp() {
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         <div className="flex items-center space-x-5 relative z-10">
-                            <div className="w-14 h-14 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 backdrop-blur-md">
+                            <div className="w-14 h-14 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-500 backdrop-blur-md">
                                 {day === 'Lunes' || day === 'Jueves' ? <Activity className="w-6 h-6" /> : <Dumbbell className="w-6 h-6" />}
                             </div>
                             <div className="text-left">
@@ -247,7 +247,7 @@ export default function MainApp() {
                                 </p>
                             </div>
                         </div>
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center relative z-10 group-hover:bg-indigo-500 transition-colors">
+                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center relative z-10 group-hover:bg-yellow-500 group-hover:text-black transition-colors">
                             <Play className="w-5 h-5 text-white ml-1" />
                         </div>
                     </motion.button>
@@ -270,7 +270,7 @@ export default function MainApp() {
             <h2 className="text-3xl font-bold text-zinc-300 mb-12 tracking-wide">Prepárate</h2>
             <div className="relative flex items-center justify-center">
                 {/* Glowing ring */}
-                <div className="absolute inset-0 rounded-full bg-indigo-500 blur-3xl opacity-20 animate-pulse" />
+                <div className="absolute inset-0 rounded-full bg-yellow-400 blur-3xl opacity-20 animate-pulse" />
                 <div className="relative w-72 h-72 flex items-center justify-center">
                     <svg className="absolute inset-0 w-full h-full transform -rotate-90">
                         <circle cx="144" cy="144" r="136" stroke="rgba(255,255,255,0.05)" strokeWidth="4" fill="transparent" />
@@ -280,12 +280,12 @@ export default function MainApp() {
                             strokeDasharray={2 * Math.PI * 136}
                             strokeDashoffset={2 * Math.PI * 136 * (1 - countdown / 30)}
                             strokeLinecap="round"
-                            className="transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(99,102,241,0.5)]"
+                            className="transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(250,204,21,0.5)]"
                         />
                         <defs>
                             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="#6366f1" />
-                                <stop offset="100%" stopColor="#a855f7" />
+                                <stop offset="0%" stopColor="#facc15" />
+                                <stop offset="100%" stopColor="#eab308" />
                             </linearGradient>
                         </defs>
                     </svg>
@@ -341,7 +341,7 @@ export default function MainApp() {
                     {/* Progress dots or indicator */}
                     <div className="flex-1 px-6">
                         <div className="relative h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
+                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
                         </div>
                     </div>
 
@@ -354,8 +354,8 @@ export default function MainApp() {
                     {step.type === 'exercise' ? (
                         <div className="space-y-6">
                             <div className="space-y-3">
-                                <div className="flex justify-between items-center text-sm font-bold text-indigo-400 tracking-wide">
-                                    <span className="bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">{step.block}</span>
+                                <div className="flex justify-between items-center text-sm font-bold text-yellow-400 tracking-wide">
+                                    <span className="bg-yellow-500/10 px-3 py-1 rounded-full border border-yellow-500/20">{step.block}</span>
                                     <span className="text-zinc-400 px-3 py-1">{step.seriesInfo}</span>
                                 </div>
                                 <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight drop-shadow-lg flex items-center justify-between">
@@ -384,9 +384,9 @@ export default function MainApp() {
                                 {(modifiedSteps[stepIndex]?.weight || step.weight) ? (
                                     <button
                                         onClick={openEditSheet}
-                                        className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-5 text-left relative overflow-hidden group hover:border-indigo-500/50 active:scale-95 transition-all flex flex-col justify-center h-32 shadow-xl"
+                                        className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-5 text-left relative overflow-hidden group hover:border-yellow-500/50 active:scale-95 transition-all flex flex-col justify-center h-32 shadow-xl"
                                     >
-                                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent pointer-events-none" />
+                                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent pointer-events-none" />
                                         <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <Edit2 className="w-4 h-4 text-zinc-400" />
                                         </div>
@@ -421,11 +421,11 @@ export default function MainApp() {
                                 )}
                             </div>
 
-                            <div className="bg-indigo-950/30 backdrop-blur-md rounded-3xl p-6 border border-indigo-500/20 shadow-inner">
-                                <div className="text-indigo-300 text-sm mb-2 font-bold uppercase tracking-wider flex items-center gap-2">
+                            <div className="bg-yellow-950/20 backdrop-blur-md rounded-3xl p-6 border border-yellow-500/20 shadow-inner">
+                                <div className="text-yellow-400 text-sm mb-2 font-bold uppercase tracking-wider flex items-center gap-2">
                                     <AlertCircle className="w-4 h-4" /> Tips
                                 </div>
-                                <p className="text-indigo-100 text-lg leading-relaxed">{step.notes}</p>
+                                <p className="text-yellow-100/90 text-lg leading-relaxed">{step.notes}</p>
                             </div>
 
                             {step.muscles && step.muscles.length > 0 && (
@@ -454,7 +454,7 @@ export default function MainApp() {
                         <div className="flex flex-col items-center justify-center space-y-6 text-center h-full">
                             <div className="relative">
                                 {/* Timer background effects */}
-                                <div className="absolute inset-0 rounded-full bg-blue-500 blur-3xl opacity-10 animate-pulse" />
+                                <div className="absolute inset-0 rounded-full bg-yellow-400 blur-3xl opacity-10 animate-pulse" />
                                 <div className="w-64 h-64 relative flex items-center justify-center">
                                     <svg className="absolute inset-0 w-full h-full transform -rotate-90">
                                         <circle cx="128" cy="128" r="120" stroke="rgba(255,255,255,0.05)" strokeWidth="6" fill="transparent" />
@@ -464,7 +464,7 @@ export default function MainApp() {
                                             strokeDasharray={2 * Math.PI * 120}
                                             strokeDashoffset={2 * Math.PI * 120 * (1 - restTimeLeft / step.duration)}
                                             strokeLinecap="round"
-                                            className="text-blue-500 transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                                            className="text-yellow-400 transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(250,204,21,0.5)]"
                                         />
                                     </svg>
                                     <div className="text-7xl font-black text-white tabular-nums tracking-tighter">
@@ -517,24 +517,24 @@ export default function MainApp() {
                             className="absolute inset-0 z-[150] bg-zinc-950/90 backdrop-blur-xl flex flex-col items-center justify-center p-8 pointer-events-auto"
                         >
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div className="w-[120%] h-[120%] bg-blue-600/30 blur-[150px] animate-pulse" />
+                                <div className="w-[120%] h-[120%] bg-yellow-500/20 blur-[150px] animate-pulse" />
                             </div>
 
                             <motion.div
                                 animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 0.8 }}
-                                className="w-32 h-32 rounded-full bg-blue-500/20 border-4 border-blue-500 flex items-center justify-center shadow-[0_0_50px_rgba(59,130,246,0.6)] mb-8"
+                                className="w-32 h-32 rounded-full bg-yellow-400/20 border-4 border-yellow-400 flex items-center justify-center shadow-[0_0_50px_rgba(250,204,21,0.6)] mb-8"
                             >
-                                <Volume2 className="w-16 h-16 text-blue-400 relative z-10" />
+                                <Volume2 className="w-16 h-16 text-yellow-400 relative z-10" />
                             </motion.div>
 
                             <h2 className="text-5xl font-black text-white tracking-widest uppercase mb-2 relative z-10">
                                 ¡TIEMPO!
                             </h2>
-                            <p className="text-blue-200 text-xl font-medium mb-12 relative z-10">Vuelve al entrenamiento</p>
+                            <p className="text-yellow-200 text-xl font-medium mb-12 relative z-10">Vuelve al entrenamiento</p>
 
                             <button
                                 onClick={advanceStep}
-                                className="w-full max-w-sm py-6 bg-blue-600 text-white rounded-full font-black text-2xl tracking-wide shadow-[0_10px_30px_rgba(37,99,235,0.4)] active:scale-95 transition-all relative z-10"
+                                className="w-full max-w-sm py-6 bg-yellow-500 text-zinc-950 rounded-full font-black text-2xl tracking-wide shadow-[0_10px_30px_rgba(234,179,8,0.4)] active:scale-95 transition-all relative z-10"
                             >
                                 CONTINUAR
                             </button>
@@ -581,7 +581,7 @@ export default function MainApp() {
                                 </div>
                                 <button
                                     onClick={saveEdit}
-                                    className="w-full mt-8 py-5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full font-black text-lg shadow-[0_10px_30px_rgba(99,102,241,0.3)] active:scale-95 transition-all"
+                                    className="w-full mt-8 py-5 bg-yellow-400 hover:bg-yellow-500 text-zinc-950 rounded-full font-black text-lg shadow-[0_10px_30px_rgba(250,204,21,0.3)] active:scale-95 transition-all"
                                 >
                                     Guardar Cambios
                                 </button>
@@ -682,7 +682,7 @@ export default function MainApp() {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col h-full bg-zinc-950 overflow-hidden relative"
             >
-                <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[50%] bg-gradient-to-b from-indigo-600/30 to-transparent rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[50%] bg-gradient-to-b from-yellow-600/30 to-transparent rounded-full blur-3xl pointer-events-none" />
 
                 <div className="pt-12 px-8 pb-6 relative z-10 flex justify-between items-start">
                     <div>
@@ -693,7 +693,7 @@ export default function MainApp() {
                             Entrenamiento<br />Completado
                         </h2>
                     </div>
-                    <button onClick={handleShare} className="w-12 h-12 flex items-center justify-center bg-indigo-500 rounded-full text-white shadow-lg active:scale-95 transition-all">
+                    <button onClick={handleShare} className="w-12 h-12 flex items-center justify-center bg-yellow-500 rounded-full text-zinc-950 shadow-lg active:scale-95 transition-all">
                         <Share2 className="w-5 h-5" />
                     </button>
                 </div>
@@ -705,7 +705,7 @@ export default function MainApp() {
                         <div className="text-3xl font-black text-white">{formatTime(totalWorkoutTime)}</div>
                     </div>
                     <div className="flex-1 bg-white/5 p-4 rounded-3xl backdrop-blur-md border border-white/10 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-purple-500/20 blur-xl rounded-full translate-x-1/2 -translate-y-1/2" />
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-yellow-500/20 blur-xl rounded-full translate-x-1/2 -translate-y-1/2" />
                         <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Series</div>
                         <div className="text-3xl font-black text-white">{workoutStats.length}</div>
                     </div>
@@ -714,7 +714,7 @@ export default function MainApp() {
                 <div className="flex-1 px-4 min-h-0 relative z-10 pb-24">
                     <div className="h-full bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-5 flex flex-col overflow-hidden shadow-2xl">
                         <h3 className="text-sm font-bold text-zinc-400 mb-4 px-2 uppercase tracking-widest flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-indigo-400" />
+                            <Activity className="w-4 h-4 text-yellow-400" />
                             Log de Ejercicios
                         </h3>
                         <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar pb-4">
@@ -727,12 +727,12 @@ export default function MainApp() {
                                     <div className="flex justify-between items-end mt-3">
                                         <div className="space-y-1.5 min-w-0 pr-4">
                                             {Array.from(exercise.reps).length > 0 && (
-                                                <div className="text-indigo-200 text-xs font-medium truncate">
+                                                <div className="text-yellow-200 text-xs font-medium truncate">
                                                     Reps: {Array.from(exercise.reps).join(' / ')}
                                                 </div>
                                             )}
                                             {Array.from(exercise.weights).length > 0 && (
-                                                <div className="text-purple-200 text-xs font-medium truncate">
+                                                <div className="text-yellow-200/80 text-xs font-medium truncate">
                                                     Carga: {Array.from(exercise.weights).join(' / ')}
                                                 </div>
                                             )}
