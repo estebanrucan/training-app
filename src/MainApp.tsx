@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { routines } from './data/routines';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, ChevronRight, CheckCircle, Timer, Dumbbell, Activity, Volume2, X, Share2, Edit2, Pause, ArrowLeft, GripHorizontal, AlertCircle } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
+import { Play, ChevronRight, CheckCircle, Timer, Dumbbell, Activity, Volume2, X, Share2, Edit2, Pause, ArrowLeft, GripHorizontal, AlertCircle, Flame, Trophy, Zap, Clock, Target } from 'lucide-react';
 
 type Screen = 'home' | 'countdown' | 'workout' | 'done';
 
-// Background animated component for the "World-Class" feel
+// Animated background component
 const BackgroundGlow = () => (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-yellow-500/20 rounded-full mix-blend-screen filter blur-[100px] animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-yellow-600/20 rounded-full mix-blend-screen filter blur-[120px] animate-pulse" style={{ animationDuration: '10s' }} />
+        <div className="absolute top-[-15%] left-[-15%] w-[55%] h-[55%] bg-yellow-500/12 rounded-full mix-blend-screen filter blur-[120px] animate-glow-pulse" />
+        <div className="absolute bottom-[-15%] right-[-15%] w-[60%] h-[60%] bg-amber-600/10 rounded-full mix-blend-screen filter blur-[140px] animate-glow-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[40%] left-[50%] w-[30%] h-[30%] bg-yellow-400/5 rounded-full mix-blend-screen filter blur-[80px] animate-glow-pulse" style={{ animationDelay: '4s' }} />
     </div>
 );
 
@@ -22,13 +22,11 @@ export default function MainApp() {
     const [isAlarmRinging, setIsAlarmRinging] = useState(false);
     const [countdown, setCountdown] = useState(30);
 
-    // New UX states
     const [isPauseMenuOpen, setIsPauseMenuOpen] = useState(false);
 
     const [workoutStats, setWorkoutStats] = useState<{ title: string, duration: number, block: string, seriesInfo: string, reps: string, weight: string }[]>([]);
     const [modifiedSteps, setModifiedSteps] = useState<Record<number, { reps?: string, weight?: string }>>({});
 
-    // Bottom Sheet states
     const [showEditSheet, setShowEditSheet] = useState(false);
     const [editForm, setEditForm] = useState({ reps: '', weight: '' });
 
@@ -48,7 +46,6 @@ export default function MainApp() {
         if (alarmIntervalRef.current) return;
 
         const playBeep = () => {
-            // Highly unpleasant, urgent double frequency beep
             const osc1 = ctx.createOscillator();
             const osc2 = ctx.createOscillator();
             const gain = ctx.createGain();
@@ -76,7 +73,6 @@ export default function MainApp() {
         };
 
         playBeep();
-        // Faster interval to make it more stressful/urgent
         alarmIntervalRef.current = window.setInterval(playBeep, 400);
         setIsAlarmRinging(true);
     };
@@ -187,8 +183,6 @@ export default function MainApp() {
 
     // Rest timer effect
     useEffect(() => {
-        // Pausing the timer if Pause Menu or Edit Sheet is open might be a good idea, 
-        // but traditionally rest timers keep going. We'll let it flow unless paused explicitly.
         if (screen === 'workout' && !isPauseMenuOpen && !showEditSheet) {
             const routine = routines[selectedDay];
             const currentStep = routine[stepIndex];
@@ -211,44 +205,77 @@ export default function MainApp() {
         }
     }, [screen, stepIndex, restTimeLeft, isAlarmRinging, selectedDay, isPauseMenuOpen, showEditSheet]);
 
+    // Get current date info
+    const today = new Date();
+    const dayName = today.toLocaleDateString('es-CL', { weekday: 'long' });
+    const dateStr = today.toLocaleDateString('es-CL', { day: 'numeric', month: 'long' });
+
+    const getRoutineSubtitle = (day: string) => {
+        if (day === 'Lunes' || day === 'Jueves') return 'Tren Superior';
+        if (day === 'Martes') return 'Tren Inferior I';
+        return 'Tren Inferior II';
+    };
+
+    const getRoutineExerciseCount = (day: string) => {
+        return routines[day].filter(s => s.type === 'exercise').length;
+    };
+
     const renderHome = () => (
         <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="flex flex-col h-full relative"
         >
-            <div className="flex flex-col items-center justify-center p-8 pt-16 space-y-3 z-10">
+            {/* Header */}
+            <div className="px-7 pt-14 pb-6 relative z-10">
                 <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }}
-                    className="w-20 h-20 rounded-3xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-2xl shadow-yellow-500/30 mb-4"
+                    initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.05 }}
+                    className="flex items-center gap-2 mb-5"
                 >
-                    <Activity className="w-10 h-10 text-white" />
+                    <div className="w-2 h-2 rounded-full bg-yellow-400 animate-breathe" />
+                    <span className="text-zinc-500 text-sm font-semibold capitalize">{dayName}, {dateStr}</span>
                 </motion.div>
-                <h1 className="text-4xl font-black tracking-tight text-white mb-2 text-center">Entrenamiento</h1>
-                <p className="text-zinc-400 text-center font-medium">Selecciona tu rutina para comenzar</p>
+
+                <motion.div
+                    initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}
+                >
+                    <h1 className="text-5xl font-black tracking-tight text-white leading-[1.1] mb-2">
+                        Tu <span className="text-gradient-gold">Entrena-</span><br />miento
+                    </h1>
+                    <p className="text-zinc-500 text-base font-medium mt-3">Selecciona tu rutina para comenzar</p>
+                </motion.div>
             </div>
 
-            <div className="flex-1 px-6 pb-12 overflow-y-auto space-y-4 z-10">
+            {/* Routine Cards */}
+            <div className="flex-1 px-5 pb-10 overflow-y-auto space-y-4 z-10 custom-scrollbar">
                 {Object.keys(routines).map((day, idx) => (
                     <motion.button
-                        initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 + idx * 0.1 }}
+                        initial={{ y: 30, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 + idx * 0.08, type: 'spring', stiffness: 300, damping: 30 }}
                         key={day}
                         onClick={() => handleStartRoutine(day)}
-                        className="w-full relative overflow-hidden group rounded-[2rem] p-6 flex items-center justify-between transition-all bg-white/5 border border-white/10 hover:bg-white/10 active:scale-[0.98]"
+                        className="w-full relative overflow-hidden group rounded-[1.75rem] p-5 flex items-center justify-between transition-all glass-card hover:bg-white/8 active:scale-[0.97]"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="flex items-center space-x-5 relative z-10">
-                            <div className="w-14 h-14 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-500 backdrop-blur-md">
+                        {/* Hover gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        <div className="flex items-center gap-5 relative z-10">
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-amber-600/10 flex items-center justify-center text-yellow-400 border border-yellow-500/10">
                                 {day === 'Lunes' || day === 'Jueves' ? <Activity className="w-6 h-6" /> : <Dumbbell className="w-6 h-6" />}
                             </div>
                             <div className="text-left">
-                                <h2 className="text-2xl font-bold text-white mb-1">{day}</h2>
-                                <p className="text-sm font-medium text-zinc-400">
-                                    {day === 'Lunes' || day === 'Jueves' ? 'Tren Superior' : day === 'Martes' ? 'Tren Inferior 1' : 'Tren Inferior 2'}
-                                </p>
+                                <h2 className="text-xl font-extrabold text-white mb-0.5 tracking-tight">{day}</h2>
+                                <p className="text-sm font-semibold text-zinc-500">{getRoutineSubtitle(day)}</p>
+                                <div className="flex items-center gap-2 mt-1.5">
+                                    <span className="text-[11px] font-bold text-zinc-600 bg-white/5 px-2 py-0.5 rounded-full">
+                                        {getRoutineExerciseCount(day)} ejercicios
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center relative z-10 group-hover:bg-yellow-500 group-hover:text-black transition-colors">
-                            <Play className="w-5 h-5 text-white ml-1" />
+
+                        <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center relative z-10 group-hover:bg-yellow-400 group-hover:text-zinc-950 transition-all duration-300 group-hover:glow-yellow">
+                            <Play className="w-5 h-5 text-zinc-400 ml-0.5 group-hover:text-zinc-950 transition-colors" />
                         </div>
                     </motion.button>
                 ))}
@@ -258,40 +285,68 @@ export default function MainApp() {
 
     const renderCountdown = () => (
         <motion.div
-            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-            className="flex flex-col items-center mt-32 h-full relative"
+            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+            className="flex flex-col items-center justify-center h-full relative"
         >
             <button
                 onClick={exitToHome}
-                className="absolute top-6 left-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white backdrop-blur-md transition-colors z-[100]"
+                className="absolute top-6 left-6 w-12 h-12 flex items-center justify-center rounded-2xl glass-card text-zinc-400 hover:text-white transition-colors z-[100] active:scale-90"
             >
                 <ArrowLeft className="w-5 h-5" />
             </button>
-            <h2 className="text-3xl font-bold text-zinc-300 mb-12 tracking-wide">Prepárate</h2>
+
+            <motion.h2
+                initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}
+                className="text-2xl font-bold text-zinc-500 mb-10 tracking-widest uppercase"
+            >
+                Prepárate
+            </motion.h2>
+
             <div className="relative flex items-center justify-center">
-                {/* Glowing ring */}
-                <div className="absolute inset-0 rounded-full bg-yellow-400 blur-3xl opacity-20 animate-pulse" />
-                <div className="relative w-72 h-72 flex items-center justify-center">
+                {/* Outer rotating ring */}
+                <div className="absolute w-80 h-80 rounded-full border border-yellow-500/10" style={{ animation: 'ring-rotate 20s linear infinite' }} />
+                <div className="absolute w-72 h-72 rounded-full border border-dashed border-yellow-500/5" style={{ animation: 'ring-rotate 15s linear infinite reverse' }} />
+
+                {/* Glow */}
+                <div className="absolute w-64 h-64 rounded-full bg-yellow-400/10 blur-3xl animate-glow-pulse" />
+
+                <div className="relative w-64 h-64 flex items-center justify-center">
                     <svg className="absolute inset-0 w-full h-full transform -rotate-90">
-                        <circle cx="144" cy="144" r="136" stroke="rgba(255,255,255,0.05)" strokeWidth="4" fill="transparent" />
+                        <circle cx="128" cy="128" r="118" stroke="rgba(255,255,255,0.04)" strokeWidth="3" fill="transparent" />
                         <circle
-                            cx="144" cy="144" r="136"
-                            stroke="url(#gradient)" strokeWidth="12" fill="transparent"
-                            strokeDasharray={2 * Math.PI * 136}
-                            strokeDashoffset={2 * Math.PI * 136 * (1 - countdown / 30)}
+                            cx="128" cy="128" r="118"
+                            stroke="url(#countdownGradient)" strokeWidth="6" fill="transparent"
+                            strokeDasharray={2 * Math.PI * 118}
+                            strokeDashoffset={2 * Math.PI * 118 * (1 - countdown / 30)}
                             strokeLinecap="round"
-                            className="transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(250,204,21,0.5)]"
+                            className="transition-all duration-1000 ease-linear"
+                            style={{ filter: 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.4))' }}
                         />
                         <defs>
-                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <linearGradient id="countdownGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stopColor="#facc15" />
-                                <stop offset="100%" stopColor="#eab308" />
+                                <stop offset="100%" stopColor="#f59e0b" />
                             </linearGradient>
                         </defs>
                     </svg>
-                    <span className="text-8xl font-black text-white">{countdown}</span>
+                    <motion.span
+                        key={countdown}
+                        initial={{ scale: 1.2, opacity: 0.5 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="text-8xl font-black text-white tabular-nums"
+                    >
+                        {countdown}
+                    </motion.span>
                 </div>
             </div>
+
+            <motion.p
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+                className="text-zinc-600 mt-8 font-semibold text-sm"
+            >
+                {selectedDay} — {getRoutineSubtitle(selectedDay)}
+            </motion.p>
+
             <button
                 onClick={() => {
                     setScreen('workout');
@@ -302,9 +357,9 @@ export default function MainApp() {
                         exerciseStartTimeRef.current = Date.now();
                     }
                 }}
-                className="absolute bottom-12 px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:scale-105 active:scale-95 transition-transform shadow-xl shadow-white/10 flex items-center gap-2 z-50"
+                className="absolute bottom-10 px-10 py-5 bg-white text-zinc-950 rounded-2xl font-black text-lg active:scale-95 transition-all shadow-[0_10px_40px_rgba(255,255,255,0.08)] flex items-center gap-2 z-50"
             >
-                Saltar Countdown <ChevronRight className="w-5 h-5" />
+                Saltar <ChevronRight className="w-5 h-5" />
             </button>
         </motion.div>
     );
@@ -326,70 +381,77 @@ export default function MainApp() {
         return (
             <motion.div
                 key={stepIndex}
-                initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -15 }}
                 className="flex flex-col h-full relative"
             >
                 {/* Top Navigation Bar */}
-                <div className="pt-3 px-4 pb-1 flex items-center justify-between z-40 relative">
+                <div className="pt-4 px-5 pb-2 flex items-center justify-between z-40 relative">
                     <button
                         onClick={() => setIsPauseMenuOpen(true)}
-                        className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white backdrop-blur-md active:scale-95 transition-all"
+                        className="w-11 h-11 flex items-center justify-center rounded-xl glass-card text-white active:scale-90 transition-all"
                     >
-                        <Pause className="w-5 h-5 fill-current" />
+                        <Pause className="w-4 h-4 fill-current" />
                     </button>
 
-                    {/* Progress dots or indicator */}
-                    <div className="flex-1 px-6">
-                        <div className="relative h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
+                    {/* Progress bar */}
+                    <div className="flex-1 px-5">
+                        <div className="relative h-[5px] w-full bg-white/5 rounded-full overflow-hidden">
+                            <div
+                                className="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-amber-500 transition-all duration-500 ease-out rounded-full"
+                                style={{ width: `${progress}%` }}
+                            />
+                            {/* Glow dot at progress tip */}
+                            <div
+                                className="absolute top-[-3px] h-[11px] w-[11px] bg-yellow-400 rounded-full shadow-[0_0_10px_rgba(250,204,21,0.6)] transition-all duration-500"
+                                style={{ left: `calc(${progress}% - 5px)` }}
+                            />
                         </div>
                     </div>
 
-                    <div className="text-[10px] font-bold text-zinc-400 bg-white/5 px-2 py-1 rounded-full border border-white/10 backdrop-blur-md">
-                        {stepIndex + 1} / {routine.length}
+                    <div className="text-[11px] font-bold text-zinc-500 glass-card px-3 py-1.5 rounded-xl">
+                        {stepIndex + 1}/{routine.length}
                     </div>
                 </div>
 
-                <div className="flex-1 px-5 pt-4 pb-44 flex flex-col relative z-30 overflow-y-auto custom-scrollbar">
+                <div className="flex-1 px-5 pt-3 pb-36 flex flex-col relative z-30 overflow-y-auto custom-scrollbar">
                     {step.type === 'exercise' ? (
                         <div className="space-y-6">
+                            {/* Block & Series info */}
                             <div className="space-y-3">
-                                <div className="flex justify-between items-center text-sm font-bold text-yellow-400 tracking-wide">
-                                    <span className="bg-yellow-500/10 px-3 py-1 rounded-full border border-yellow-500/20">{step.block}</span>
-                                    <span className="text-zinc-400 px-3 py-1">{step.seriesInfo}</span>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-xs font-bold text-yellow-400 bg-yellow-500/10 px-3 py-1.5 rounded-xl border border-yellow-500/15 tracking-wide">{step.block}</span>
+                                    <span className="text-xs font-bold text-zinc-500 bg-white/5 px-3 py-1.5 rounded-xl">{step.seriesInfo}</span>
                                 </div>
-                                <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight drop-shadow-lg flex items-center justify-between">
-                                    {step.title}
-                                </h2>
+                                <h2 className="text-[2rem] font-black text-white leading-tight tracking-tight">{step.title}</h2>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            {/* Reps & Weight cards */}
+                            <div className="grid grid-cols-2 gap-3.5">
                                 <button
                                     onClick={openEditSheet}
-                                    className="bg-white/5 backdrop-blur-xl rounded-[2rem] p-5 text-left border border-white/10 relative overflow-hidden group hover:bg-white/10 active:scale-95 transition-all flex flex-col justify-center h-32"
+                                    className="glass-card-strong rounded-[1.5rem] p-5 text-left relative overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[130px]"
                                 >
-                                    <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Edit2 className="w-4 h-4 text-zinc-400" />
+                                    <div className="absolute top-3 right-3 opacity-0 group-active:opacity-100 transition-opacity">
+                                        <Edit2 className="w-3.5 h-3.5 text-zinc-500" />
                                     </div>
-                                    <div className="text-zinc-500 text-xs font-bold tracking-widest uppercase mb-1">Repeticiones</div>
+                                    <div className="text-zinc-500 text-[11px] font-bold tracking-[0.12em] uppercase mb-2">Repeticiones</div>
                                     <div className="flex items-baseline gap-1.5">
                                         <span className="text-5xl font-black text-white tracking-tighter">
                                             {(modifiedSteps[stepIndex]?.reps || step.reps).replace(/reps?/i, '').trim()}
                                         </span>
-                                        <span className="text-zinc-400 font-bold text-sm">reps</span>
+                                        <span className="text-zinc-500 font-bold text-xs">reps</span>
                                     </div>
                                 </button>
 
                                 {(modifiedSteps[stepIndex]?.weight || step.weight) ? (
                                     <button
                                         onClick={openEditSheet}
-                                        className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-5 text-left relative overflow-hidden group hover:border-yellow-500/50 active:scale-95 transition-all flex flex-col justify-center h-32 shadow-xl"
+                                        className="relative rounded-[1.5rem] p-5 text-left overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[130px] bg-gradient-to-br from-yellow-500/10 via-zinc-900 to-zinc-900 border border-yellow-500/15"
                                     >
-                                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent pointer-events-none" />
-                                        <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Edit2 className="w-4 h-4 text-zinc-400" />
+                                        <div className="absolute top-3 right-3 opacity-0 group-active:opacity-100 transition-opacity">
+                                            <Edit2 className="w-3.5 h-3.5 text-zinc-500" />
                                         </div>
-                                        <div className="text-zinc-500 text-xs font-bold tracking-widest uppercase mb-1 relative z-10">Carga</div>
+                                        <div className="text-zinc-500 text-[11px] font-bold tracking-[0.12em] uppercase mb-2 relative z-10">Carga</div>
                                         <div className="flex items-baseline gap-1 leading-none relative z-10">
                                             {(() => {
                                                 const w = (modifiedSteps[stepIndex]?.weight || step.weight) as string;
@@ -397,20 +459,20 @@ export default function MainApp() {
                                                 if (parts.length === 3 && parts[0].includes('x')) {
                                                     return (
                                                         <>
-                                                            <span className="text-zinc-400 font-bold text-xl">{parts[0]}</span>
+                                                            <span className="text-yellow-400/70 font-bold text-xl">{parts[0]}</span>
                                                             <span className="text-5xl font-black text-white tracking-tighter">{parts[1]}</span>
-                                                            <span className="text-zinc-400 font-bold text-sm">{parts[2]}</span>
+                                                            <span className="text-zinc-500 font-bold text-xs">{parts[2]}</span>
                                                         </>
                                                     );
                                                 } else if (parts.length === 2) {
                                                     return (
                                                         <>
                                                             <span className="text-5xl font-black text-white tracking-tighter">{parts[0]}</span>
-                                                            <span className="text-zinc-400 font-bold text-sm">{parts[1]}</span>
+                                                            <span className="text-zinc-500 font-bold text-xs">{parts[1]}</span>
                                                         </>
                                                     );
                                                 } else {
-                                                    return <span className="text-4xl font-black text-white tracking-tighter leading-tight break-words">{w}</span>;
+                                                    return <span className="text-3xl font-black text-white tracking-tighter leading-tight break-words">{w}</span>;
                                                 }
                                             })()}
                                         </div>
@@ -420,28 +482,32 @@ export default function MainApp() {
                                 )}
                             </div>
 
-                            <div className="bg-yellow-950/20 backdrop-blur-md rounded-3xl p-6 border border-yellow-500/20 shadow-inner">
-                                <div className="text-yellow-400 text-sm mb-2 font-bold uppercase tracking-wider flex items-center gap-2">
-                                    <AlertCircle className="w-4 h-4" /> Tips
+                            {/* Tips */}
+                            <div className="bg-gradient-to-br from-yellow-950/30 to-yellow-950/10 backdrop-blur-md rounded-2xl p-5 border border-yellow-500/15 min-h-[100px]">
+                                <div className="text-yellow-400/80 text-[10px] mb-2 font-bold uppercase tracking-[0.15em] flex items-center gap-2">
+                                    <Zap className="w-3.5 h-3.5" /> Técnica
                                 </div>
-                                <p className="text-yellow-100/90 text-lg leading-relaxed">{step.notes}</p>
+                                <p className="text-yellow-100/80 text-base leading-relaxed font-medium">{step.notes}</p>
                             </div>
 
+                            {/* Muscle Activation */}
                             {step.muscles && step.muscles.length > 0 && (
-                                <div className="space-y-3 pt-2">
-                                    <div className="text-zinc-500 text-xs font-bold uppercase tracking-widest pl-1">Activación Muscular</div>
-                                    <div className="flex flex-wrap gap-2">
+                                <div className="space-y-3">
+                                    <div className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.15em] pl-1 flex items-center gap-2">
+                                        <Target className="w-3 h-3" /> Activación Muscular
+                                    </div>
+                                    <div className="flex flex-wrap gap-2.5">
                                         {step.muscles.map((muscle: any, idx: number) => (
                                             <div
                                                 key={idx}
-                                                className={`px-4 py-2 rounded-2xl text-sm font-bold border flex items-center gap-2 backdrop-blur-md
+                                                className={`px-4 py-2.5 rounded-xl text-sm font-bold border flex items-center gap-2
                           ${muscle.type === 'primary'
-                                                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                                                        : 'bg-white/5 text-zinc-300 border-white/10'
-                                                    } `}
+                                                        ? 'bg-emerald-500/8 text-emerald-400 border-emerald-500/15'
+                                                        : 'bg-white/3 text-zinc-400 border-white/8'
+                                                    }`}
                                             >
                                                 <span>{muscle.name}</span>
-                                                <span className={`${muscle.type === 'primary' ? 'text-emerald-500' : 'text-zinc-500'} tabular-nums`}>{muscle.percentage}%</span>
+                                                <span className={`${muscle.type === 'primary' ? 'text-emerald-500/60' : 'text-zinc-600'} tabular-nums text-[11px]`}>{muscle.percentage}%</span>
                                             </div>
                                         ))}
                                     </div>
@@ -450,90 +516,104 @@ export default function MainApp() {
 
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center space-y-6 text-center h-full my-auto">
+                        /* REST SCREEN */
+                        <div className="flex flex-col items-center justify-center space-y-5 text-center h-full my-auto">
                             <div className="relative">
-                                {/* Timer background effects */}
-                                <div className="absolute inset-0 rounded-full bg-yellow-400 blur-3xl opacity-10 animate-pulse" />
-                                <div className="w-64 h-64 relative flex items-center justify-center">
+                                {/* Timer glow */}
+                                <div className="absolute inset-0 rounded-full bg-yellow-400 blur-3xl opacity-8 animate-glow-pulse" />
+                                <div className="w-60 h-60 relative flex items-center justify-center">
                                     <svg className="absolute inset-0 w-full h-full transform -rotate-90">
-                                        <circle cx="128" cy="128" r="120" stroke="rgba(255,255,255,0.05)" strokeWidth="6" fill="transparent" />
+                                        <circle cx="120" cy="120" r="112" stroke="rgba(255,255,255,0.04)" strokeWidth="4" fill="transparent" />
                                         <circle
-                                            cx="128" cy="128" r="120"
-                                            stroke="currentColor" strokeWidth="8" fill="transparent"
-                                            strokeDasharray={2 * Math.PI * 120}
-                                            strokeDashoffset={2 * Math.PI * 120 * (1 - restTimeLeft / step.duration)}
+                                            cx="120" cy="120" r="112"
+                                            stroke="url(#restGradient)" strokeWidth="6" fill="transparent"
+                                            strokeDasharray={2 * Math.PI * 112}
+                                            strokeDashoffset={2 * Math.PI * 112 * (1 - restTimeLeft / step.duration)}
                                             strokeLinecap="round"
-                                            className="text-yellow-400 transition-all duration-1000 ease-linear shadow-[0_0_15px_rgba(250,204,21,0.5)]"
+                                            className="transition-all duration-1000 ease-linear"
+                                            style={{ filter: 'drop-shadow(0 0 10px rgba(250, 204, 21, 0.4))' }}
                                         />
+                                        <defs>
+                                            <linearGradient id="restGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stopColor="#facc15" />
+                                                <stop offset="100%" stopColor="#f59e0b" />
+                                            </linearGradient>
+                                        </defs>
                                     </svg>
-                                    <div className="text-7xl font-black text-white tabular-nums tracking-tighter">
+                                    <div className="text-6xl font-black text-white tabular-nums tracking-tighter">
                                         {Math.floor(restTimeLeft / 60)}:{(restTimeLeft % 60).toString().padStart(2, '0')}
                                     </div>
                                 </div>
                             </div>
-                            <h2 className="text-2xl font-bold text-zinc-400 uppercase tracking-widest">Descanso</h2>
+
+                            <h2 className="text-xl font-bold text-zinc-500 uppercase tracking-[0.2em]">Descanso</h2>
 
                             {step.nextExercise && (
-                                <div className="mt-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 w-full text-left">
-                                    <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2">Siguiente Ejercicio</div>
-                                    <div className="text-2xl font-black text-white line-clamp-2">{step.nextExercise}</div>
+                                <div className="glass-card rounded-2xl p-5 w-full text-left mt-4">
+                                    <div className="text-zinc-500 text-[10px] font-bold uppercase tracking-[0.15em] mb-2 flex items-center gap-2">
+                                        <ChevronRight className="w-3 h-3" /> Siguiente
+                                    </div>
+                                    <div className="text-xl font-black text-white line-clamp-2">{step.nextExercise}</div>
                                 </div>
                             )}
                         </div>
                     )}
                 </div>
 
-                {/* Main Action Button - Floating at bottom */}
-                <div className="fixed bottom-0 left-0 w-full p-6 z-40 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pb-8">
+                {/* Main Action Button */}
+                <div className="fixed bottom-0 left-0 w-full px-5 pt-4 z-40 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pb-6">
                     <button
                         onClick={advanceStep}
-                        className="w-full h-20 bg-yellow-400 text-zinc-950 rounded-3xl font-black text-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all shadow-[0_10px_40px_rgba(250,204,21,0.2)] overflow-hidden relative group"
+                        className={`w-full h-[72px] rounded-2xl font-black text-xl flex items-center justify-center gap-3 active:scale-[0.97] transition-all overflow-hidden relative group
+                            ${step.type === 'exercise'
+                                ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-zinc-950 glow-yellow-strong'
+                                : 'bg-white text-zinc-950'
+                            }`}
                     >
                         {step.type === 'exercise' ? (
                             <>
-                                <CheckCircle className="w-7 h-7" /> COMPLETAR SERIE
+                                <CheckCircle className="w-6 h-6" /> COMPLETAR SERIE
                             </>
                         ) : (
                             <>
                                 SALTAR DESCANSO <ChevronRight className="w-6 h-6" />
                             </>
                         )}
-                        {/* Shimmer effect */}
-                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
+                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-[shimmer_2s_infinite]" />
                     </button>
                     {nextDifferentExercise && step.type === 'exercise' && (
-                        <div className="text-center mt-4">
-                            <span className="text-zinc-500 text-sm font-bold tracking-wide">Sig: <span className="text-zinc-300">{nextDifferentExercise}</span></span>
+                        <div className="text-center mt-3">
+                            <span className="text-zinc-600 text-xs font-bold">Sig: <span className="text-zinc-400">{nextDifferentExercise}</span></span>
                         </div>
                     )}
                 </div>
 
-                {/* Alarm Overlay - Visual redesign but maintaining the sound */}
+                {/* Alarm Overlay */}
                 <AnimatePresence>
                     {isAlarmRinging && (
                         <motion.div
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                            className="absolute inset-0 z-[150] bg-zinc-950/90 backdrop-blur-xl flex flex-col items-center justify-center p-8 pointer-events-auto"
+                            className="absolute inset-0 z-[150] bg-zinc-950/95 backdrop-blur-2xl flex flex-col items-center justify-center p-8 pointer-events-auto"
                         >
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div className="w-[120%] h-[120%] bg-yellow-500/20 blur-[150px] animate-pulse" />
+                                <div className="w-[130%] h-[130%] bg-yellow-500/15 blur-[180px] animate-glow-pulse" />
                             </div>
 
                             <motion.div
-                                animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 0.8 }}
-                                className="w-32 h-32 rounded-full bg-yellow-400/20 border-4 border-yellow-400 flex items-center justify-center shadow-[0_0_50px_rgba(250,204,21,0.6)] mb-8"
+                                animate={{ scale: [1, 1.15, 1] }} transition={{ repeat: Infinity, duration: 0.7 }}
+                                className="w-28 h-28 rounded-full bg-yellow-400/15 border-[3px] border-yellow-400 flex items-center justify-center glow-yellow-strong mb-8 relative"
                             >
-                                <Volume2 className="w-16 h-16 text-yellow-400 relative z-10" />
+                                <Volume2 className="w-14 h-14 text-yellow-400 relative z-10" />
                             </motion.div>
 
                             <h2 className="text-5xl font-black text-white tracking-widest uppercase mb-2 relative z-10">
                                 ¡TIEMPO!
                             </h2>
-                            <p className="text-yellow-200 text-xl font-medium mb-12 relative z-10">Vuelve al entrenamiento</p>
+                            <p className="text-yellow-200/60 text-lg font-medium mb-12 relative z-10">Vuelve al entrenamiento</p>
 
                             <button
                                 onClick={advanceStep}
-                                className="w-full max-w-sm py-6 bg-yellow-500 text-zinc-950 rounded-full font-black text-2xl tracking-wide shadow-[0_10px_30px_rgba(234,179,8,0.4)] active:scale-95 transition-all relative z-10"
+                                className="w-full max-w-sm py-6 bg-gradient-to-r from-yellow-400 to-amber-500 text-zinc-950 rounded-2xl font-black text-xl active:scale-95 transition-all glow-yellow-strong relative z-10"
                             >
                                 CONTINUAR
                             </button>
@@ -548,39 +628,39 @@ export default function MainApp() {
                             <motion.div
                                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                                 onClick={() => setShowEditSheet(false)}
-                                className="absolute inset-0 z-[200] bg-black/60 backdrop-blur-sm pointer-events-auto"
+                                className="absolute inset-0 z-[200] bg-black/70 backdrop-blur-sm pointer-events-auto"
                             />
                             <motion.div
-                                initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                                className="absolute bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 rounded-t-[3rem] p-6 pb-16 z-[201] pointer-events-auto shadow-2xl"
+                                initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 250 }}
+                                className="absolute bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 rounded-t-[2.5rem] p-6 pb-14 z-[201] pointer-events-auto shadow-2xl"
                             >
-                                <div className="w-12 h-1.5 bg-zinc-700 rounded-full mx-auto mb-8" />
-                                <h3 className="text-2xl font-black text-white mb-6">Ajustar Serie</h3>
+                                <div className="w-10 h-1 bg-zinc-700 rounded-full mx-auto mb-7" />
+                                <h3 className="text-xl font-black text-white mb-5">Ajustar Serie</h3>
 
-                                <div className="space-y-5">
-                                    <div className="bg-zinc-950/50 border border-zinc-800 rounded-3xl p-5">
-                                        <label className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2 block">Repeticiones</label>
+                                <div className="space-y-4">
+                                    <div className="glass-card rounded-2xl p-4">
+                                        <label className="text-zinc-500 text-[10px] font-bold uppercase tracking-[0.15em] mb-2 block">Repeticiones</label>
                                         <input
                                             type="text"
                                             value={editForm.reps}
                                             onChange={e => setEditForm({ ...editForm, reps: e.target.value })}
-                                            className="w-full bg-transparent text-white font-black text-3xl focus:outline-none placeholder-zinc-700"
+                                            className="w-full bg-transparent text-white font-black text-2xl focus:outline-none placeholder-zinc-700"
                                         />
                                     </div>
-                                    <div className="bg-zinc-950/50 border border-zinc-800 rounded-3xl p-5">
-                                        <label className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2 block">Carga</label>
+                                    <div className="glass-card rounded-2xl p-4">
+                                        <label className="text-zinc-500 text-[10px] font-bold uppercase tracking-[0.15em] mb-2 block">Carga</label>
                                         <input
                                             type="text"
                                             value={editForm.weight}
                                             onChange={e => setEditForm({ ...editForm, weight: e.target.value })}
-                                            className="w-full bg-transparent text-white font-black text-3xl focus:outline-none placeholder-zinc-700"
+                                            className="w-full bg-transparent text-white font-black text-2xl focus:outline-none placeholder-zinc-700"
                                             placeholder="Ej: 2x 15.3 kg"
                                         />
                                     </div>
                                 </div>
                                 <button
                                     onClick={saveEdit}
-                                    className="w-full mt-8 py-5 bg-yellow-400 hover:bg-yellow-500 text-zinc-950 rounded-full font-black text-lg shadow-[0_10px_30px_rgba(250,204,21,0.3)] active:scale-95 transition-all"
+                                    className="w-full mt-6 py-5 bg-gradient-to-r from-yellow-400 to-amber-500 text-zinc-950 rounded-2xl font-black text-lg active:scale-95 transition-all glow-yellow"
                                 >
                                     Guardar Cambios
                                 </button>
@@ -589,7 +669,7 @@ export default function MainApp() {
                     )}
                 </AnimatePresence>
 
-                {/* Pause / Exit Menu Bottom Sheet */}
+                {/* Pause Menu */}
                 <AnimatePresence>
                     {isPauseMenuOpen && (
                         <>
@@ -599,23 +679,23 @@ export default function MainApp() {
                                 className="absolute inset-0 z-[200] bg-black/80 backdrop-blur-md pointer-events-auto"
                             />
                             <motion.div
-                                initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                                className="absolute bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 rounded-t-[3rem] p-6 pb-16 z-[201] pointer-events-auto"
+                                initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 250 }}
+                                className="absolute bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 rounded-t-[2.5rem] p-6 pb-14 z-[201] pointer-events-auto"
                             >
-                                <div className="w-12 h-1.5 bg-zinc-700 rounded-full mx-auto mb-8" />
-                                <h3 className="text-3xl font-black text-white mb-2">Pausa</h3>
-                                <p className="text-zinc-400 mb-8 font-medium">¿Qué deseas hacer?</p>
+                                <div className="w-10 h-1 bg-zinc-700 rounded-full mx-auto mb-7" />
+                                <h3 className="text-2xl font-black text-white mb-1">Pausa</h3>
+                                <p className="text-zinc-500 mb-7 font-medium text-sm">¿Qué deseas hacer?</p>
 
-                                <div className="space-y-4">
+                                <div className="space-y-3">
                                     <button
                                         onClick={() => setIsPauseMenuOpen(false)}
-                                        className="w-full py-5 bg-white text-black rounded-full font-black text-lg hover:bg-zinc-200 active:scale-95 transition-all"
+                                        className="w-full py-5 bg-white text-zinc-950 rounded-2xl font-black text-lg active:scale-95 transition-all"
                                     >
                                         Reanudar Entrenamiento
                                     </button>
                                     <button
                                         onClick={exitToHome}
-                                        className="w-full py-5 bg-red-500/10 text-red-500 rounded-full font-bold text-lg hover:bg-red-500/20 active:scale-95 transition-all border border-red-500/20"
+                                        className="w-full py-5 bg-red-500/8 text-red-400 rounded-2xl font-bold text-lg active:scale-95 transition-all border border-red-500/15"
                                     >
                                         Finalizar y Salir
                                     </button>
@@ -632,7 +712,7 @@ export default function MainApp() {
         const formatTime = (seconds: number) => {
             const m = Math.floor(seconds / 60);
             const s = seconds % 60;
-            return m > 0 ? `${m}m ${s} s` : `${s} s`;
+            return m > 0 ? `${m}m ${s}s` : `${s}s`;
         };
 
         const totalWorkoutTime = workoutStartTimeRef.current ? Math.floor((Date.now() - workoutStartTimeRef.current) / 1000) : 0;
@@ -672,7 +752,6 @@ export default function MainApp() {
         };
 
         const handleShare = async () => {
-            // Here you could add html2canvas library in the future for actual screenshots
             alert("Toma una captura de esta pantalla para compartir tu entrenamiento.");
         };
 
@@ -681,75 +760,110 @@ export default function MainApp() {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col h-full bg-zinc-950 overflow-hidden relative"
             >
-                <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[50%] bg-gradient-to-b from-yellow-600/30 to-transparent rounded-full blur-3xl pointer-events-none" />
+                {/* Celebration background */}
+                <div className="absolute top-[-25%] left-[-25%] w-[150%] h-[55%] bg-gradient-to-b from-yellow-500/20 via-amber-600/10 to-transparent rounded-full blur-3xl pointer-events-none animate-glow-pulse" />
 
-                <div className="pt-12 px-8 pb-6 relative z-10 flex justify-between items-start">
+                {/* Header */}
+                <div className="pt-12 px-7 pb-5 relative z-10 flex justify-between items-start">
                     <div>
-                        <div className="inline-block px-3 py-1 bg-white/10 text-white rounded-full text-xs font-bold mb-3 border border-white/20 backdrop-blur-md uppercase tracking-widest">
-                            {selectedDay}
-                        </div>
-                        <h2 className="text-4xl font-black text-white leading-tight">
-                            Entrenamiento<br />Completado
-                        </h2>
+                        <motion.div
+                            initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring' }}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 glass-card text-yellow-400 rounded-xl text-xs font-bold mb-4 tracking-wide"
+                        >
+                            <Trophy className="w-3.5 h-3.5" /> {selectedDay}
+                        </motion.div>
+                        <motion.h2
+                            initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}
+                            className="text-4xl font-black text-white leading-tight"
+                        >
+                            Entrenamiento<br />
+                            <span className="text-gradient-gold">Completado</span>
+                        </motion.h2>
                     </div>
-                    <button onClick={handleShare} className="w-12 h-12 flex items-center justify-center bg-yellow-500 rounded-full text-zinc-950 shadow-lg active:scale-95 transition-all">
+                    <motion.button
+                        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4, type: 'spring' }}
+                        onClick={handleShare}
+                        className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl text-zinc-950 active:scale-90 transition-all glow-yellow"
+                    >
                         <Share2 className="w-5 h-5" />
-                    </button>
+                    </motion.button>
                 </div>
 
-                <div className="px-8 flex gap-4 relative z-10 mb-8">
-                    <div className="flex-1 bg-white/5 p-4 rounded-3xl backdrop-blur-md border border-white/10 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/20 blur-xl rounded-full translate-x-1/2 -translate-y-1/2" />
-                        <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Tiempo</div>
-                        <div className="text-3xl font-black text-white">{formatTime(totalWorkoutTime)}</div>
+                {/* Stats */}
+                <motion.div
+                    initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}
+                    className="px-5 flex gap-3 relative z-10 mb-6"
+                >
+                    <div className="flex-1 glass-card-strong p-4 rounded-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/15 blur-xl rounded-full translate-x-1/2 -translate-y-1/2" />
+                        <div className="flex items-center gap-2 mb-1">
+                            <Clock className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">Tiempo</span>
+                        </div>
+                        <div className="text-2xl font-black text-white">{formatTime(totalWorkoutTime)}</div>
                     </div>
-                    <div className="flex-1 bg-white/5 p-4 rounded-3xl backdrop-blur-md border border-white/10 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-yellow-500/20 blur-xl rounded-full translate-x-1/2 -translate-y-1/2" />
-                        <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Series</div>
-                        <div className="text-3xl font-black text-white">{workoutStats.length}</div>
+                    <div className="flex-1 glass-card-strong p-4 rounded-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-yellow-500/15 blur-xl rounded-full translate-x-1/2 -translate-y-1/2" />
+                        <div className="flex items-center gap-2 mb-1">
+                            <Flame className="w-3.5 h-3.5 text-yellow-400" />
+                            <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">Series</span>
+                        </div>
+                        <div className="text-2xl font-black text-white">{workoutStats.length}</div>
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="flex-1 px-4 min-h-0 relative z-10 pb-24">
-                    <div className="h-full bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-5 flex flex-col overflow-hidden shadow-2xl">
-                        <h3 className="text-sm font-bold text-zinc-400 mb-4 px-2 uppercase tracking-widest flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-yellow-400" />
+                {/* Exercise Log */}
+                <motion.div
+                    initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }}
+                    className="flex-1 px-5 min-h-0 relative z-10 pb-28"
+                >
+                    <div className="h-full glass-card-strong rounded-[2rem] p-5 flex flex-col overflow-hidden">
+                        <h3 className="text-[10px] font-bold text-zinc-500 mb-4 px-1 uppercase tracking-[0.15em] flex items-center gap-2">
+                            <Activity className="w-3.5 h-3.5 text-yellow-400" />
                             Log de Ejercicios
                         </h3>
-                        <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar pb-4">
+                        <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar pb-3">
                             {exerciseList.map((exercise, idx) => (
-                                <div key={idx} className="bg-black/40 border border-white/5 rounded-2xl p-4">
+                                <motion.div
+                                    key={idx}
+                                    initial={{ x: 20, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{ delay: 0.6 + idx * 0.05 }}
+                                    className="bg-white/3 border border-white/5 rounded-2xl p-4"
+                                >
                                     <div className="flex justify-between items-start mb-2">
-                                        <h4 className="text-white font-bold text-sm leading-tight pr-4">{exercise.title}</h4>
-                                        <div className="bg-white/10 text-white px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap">{exercise.series} Series</div>
+                                        <h4 className="text-white font-bold text-sm leading-tight pr-3">{exercise.title}</h4>
+                                        <div className="bg-white/8 text-zinc-300 px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap">{exercise.series}S</div>
                                     </div>
-                                    <div className="flex justify-between items-end mt-3">
-                                        <div className="space-y-1.5 min-w-0 pr-4">
+                                    <div className="flex justify-between items-end mt-2">
+                                        <div className="space-y-1 min-w-0 pr-3">
                                             {Array.from(exercise.reps).length > 0 && (
-                                                <div className="text-yellow-200 text-xs font-medium truncate">
-                                                    Reps: {Array.from(exercise.reps).join(' / ')}
+                                                <div className="text-yellow-200/70 text-[11px] font-semibold truncate">
+                                                    {Array.from(exercise.reps).join(' / ')}
                                                 </div>
                                             )}
                                             {Array.from(exercise.weights).length > 0 && (
-                                                <div className="text-yellow-200/80 text-xs font-medium truncate">
-                                                    Carga: {Array.from(exercise.weights).join(' / ')}
+                                                <div className="text-zinc-500 text-[11px] font-semibold truncate">
+                                                    {Array.from(exercise.weights).join(' / ')}
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="text-emerald-400 font-black text-sm tabular-nums whitespace-nowrap">
-                                            {calculateScore(exercise)} pt
+                                        <div className="text-emerald-400 font-black text-sm tabular-nums whitespace-nowrap flex items-center gap-1">
+                                            <Zap className="w-3 h-3" />
+                                            {calculateScore(exercise)}
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="absolute bottom-0 left-0 w-full p-6 pt-12 pb-10 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent z-20">
+                {/* Bottom Button */}
+                <div className="absolute bottom-0 left-0 w-full p-5 pt-12 pb-8 bg-gradient-to-t from-zinc-950 via-zinc-950/90 to-transparent z-20">
                     <button
                         onClick={exitToHome}
-                        className="w-full py-5 bg-white text-black rounded-full font-black text-lg active:scale-95 transition-transform"
+                        className="w-full py-5 bg-white text-zinc-950 rounded-2xl font-black text-lg active:scale-95 transition-all"
                     >
                         Volver al Inicio
                     </button>
@@ -759,7 +873,7 @@ export default function MainApp() {
     };
 
     return (
-        <div className="h-[100dvh] w-full relative overflow-hidden bg-zinc-950 text-white selection:bg-indigo-500/30">
+        <div className="h-[100dvh] w-full relative overflow-hidden bg-zinc-950 text-white selection:bg-yellow-500/30">
             <BackgroundGlow />
             <AnimatePresence mode="wait">
                 {screen === 'home' && renderHome()}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ShieldCheck, AlertCircle, Lock, MapPinOff } from 'lucide-react';
+import { ShieldCheck, AlertCircle, Lock, Fingerprint } from 'lucide-react';
 
 const MainApp = lazy(() => import('./MainApp'));
 
@@ -12,7 +12,6 @@ export default function App() {
   const [password, setPassword] = useState('');
   const [errorIndex, setErrorIndex] = useState(0);
 
-  // Persisted state
   const [attempts, setAttempts] = useState(() => {
     return parseInt(localStorage.getItem('loginAttempts') || '0', 10);
   });
@@ -27,13 +26,9 @@ export default function App() {
   });
 
   const [isChecking, setIsChecking] = useState(false);
-
-  // Geolocation and IP state
   const [isLocationChecking, setIsLocationChecking] = useState(true);
   const [isAllowedLocation, setIsAllowedLocation] = useState(false);
   const [userIp, setUserIp] = useState('');
-
-  // IP Blocklist check from localStorage 
   const [isIpBlocked, setIsIpBlocked] = useState(false);
 
   useEffect(() => {
@@ -45,20 +40,16 @@ export default function App() {
 
         setUserIp(data.ip);
 
-        // Persistent IP block check
         const blockedIps = JSON.parse(localStorage.getItem('blockedIps') || '[]');
         if (blockedIps.includes(data.ip)) {
           setIsIpBlocked(true);
         }
 
-        // Only allow connections from Chile (country_code: 'CL')
         if (data.country_code === 'CL') {
           setIsAllowedLocation(true);
         }
       } catch (error) {
         console.error("Error checking location:", error);
-        // By default, if we can't verify, we'll allow but they still need the password.
-        // Assuming user wants strictness, we could block it, but let's be safe.
       } finally {
         setIsLocationChecking(false);
       }
@@ -101,12 +92,10 @@ export default function App() {
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
       } else {
-        // Fallback for local network access (HTTP instead of HTTPS)
-        // crypto.subtle is undefined in insecure contexts.
         hashHex = password === '0536' ? 'a952de18bfa1e4213e709392daf76ad9fa9887fc3853730ac6c7f1758445cd5d' : 'invalid';
       }
 
-      await new Promise(resolve => setTimeout(resolve, 500)); // Rate limiting
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       if (hashHex === 'a952de18bfa1e4213e709392daf76ad9fa9887fc3853730ac6c7f1758445cd5d') {
         sessionStorage.setItem('isAuthenticated', 'true');
@@ -120,7 +109,6 @@ export default function App() {
         setErrorIndex(prev => prev + 1);
         setPassword('');
 
-        // Block IP permanently after 10 failed attempts, or 30s timeout after 5 attempts
         if (newAttempts >= 10) {
           setIsIpBlocked(true);
           const blockedIps = JSON.parse(localStorage.getItem('blockedIps') || '[]');
@@ -129,7 +117,7 @@ export default function App() {
             localStorage.setItem('blockedIps', JSON.stringify(blockedIps));
           }
         } else if (newAttempts >= 5) {
-          const timeoutSeconds = 60 * (newAttempts - 4); // Escalates timeout: 1m, 2m, 3m...
+          const timeoutSeconds = 60 * (newAttempts - 4);
           setLockoutTime(timeoutSeconds);
           localStorage.setItem('lockoutUntil', (Date.now() + timeoutSeconds * 1000).toString());
         }
@@ -143,7 +131,7 @@ export default function App() {
     if (isLocationChecking) {
       return (
         <div className="flex flex-col items-center justify-center h-full p-6 space-y-4">
-          <div className="w-8 h-8 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+          <div className="w-10 h-10 border-3 border-yellow-500/30 border-t-yellow-400 rounded-full animate-spin" />
         </div>
       );
     }
@@ -151,50 +139,75 @@ export default function App() {
     return (
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        className="flex flex-col items-center justify-center h-full p-6 space-y-8"
+        className="flex flex-col items-center justify-center h-full px-8 relative"
       >
-        <div className="w-20 h-20 rounded-full bg-indigo-500/10 flex items-center justify-center mb-4 border border-indigo-500/20">
-          <ShieldCheck className="w-10 h-10 text-indigo-400" />
-        </div>
+        {/* Background decorations */}
+        <div className="absolute top-[10%] left-[-20%] w-[60%] h-[40%] bg-yellow-500/10 rounded-full blur-[120px] animate-glow-pulse pointer-events-none" />
+        <div className="absolute bottom-[10%] right-[-20%] w-[50%] h-[40%] bg-amber-600/10 rounded-full blur-[100px] animate-glow-pulse pointer-events-none" style={{ animationDelay: '2s' }} />
 
-        <div className="text-center space-y-3 w-full">
-          <h1 className="text-3xl font-black tracking-tight text-white">Acceso Restringido</h1>
-          <p className="text-zinc-400 text-sm">Ingresa tu código de seguridad para continuar</p>
-        </div>
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
+          className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 flex items-center justify-center mb-8 glow-yellow animate-float relative"
+        >
+          <Fingerprint className="w-12 h-12 text-zinc-950" />
+          <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-white/20 to-transparent" />
+        </motion.div>
 
-        <form onSubmit={handleLogin} className="w-full space-y-6">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-center space-y-3 w-full mb-10"
+        >
+          <h1 className="text-4xl font-black tracking-tight text-white">Acceso Privado</h1>
+          <p className="text-zinc-500 text-base font-medium">Ingresa tu código para continuar</p>
+        </motion.div>
+
+        <motion.form
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          onSubmit={handleLogin}
+          className="w-full space-y-5 max-w-sm"
+        >
           <div className="relative">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-500/20 via-transparent to-yellow-500/20 blur-xl opacity-50 pointer-events-none" />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={lockoutTime > 0 || isChecking}
-              placeholder="Contraseña"
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl px-5 py-4 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all disabled:opacity-50 text-center tracking-widest text-xl font-bold"
+              placeholder="• • • •"
+              className="w-full glass-card-strong rounded-2xl px-6 py-5 text-white placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-transparent transition-all disabled:opacity-40 text-center tracking-[0.5em] text-2xl font-black relative z-10"
               maxLength={20}
               autoComplete="off"
               id="security-code"
             />
           </div>
 
-          {errorIndex > 0 && lockoutTime === 0 && attempts < 5 && (
-            <motion.div
-              key={errorIndex}
-              initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-              className="flex items-center space-x-2 text-red-400 bg-red-500/10 px-4 py-3 rounded-xl border border-red-500/20 justify-center"
-            >
-              <AlertCircle className="w-5 h-5" />
-              <span className="text-sm font-semibold">
-                Código incorrecto. Intentos restantes: {5 - attempts}
-              </span>
-            </motion.div>
-          )}
+          <AnimatePresence>
+            {errorIndex > 0 && lockoutTime === 0 && attempts < 5 && (
+              <motion.div
+                key={errorIndex}
+                initial={{ opacity: 0, y: -10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+                className="flex items-center gap-3 text-red-400 glass-card rounded-2xl px-5 py-4 border-red-500/20 justify-center"
+                style={{ borderColor: 'rgba(239, 68, 68, 0.2)' }}
+              >
+                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                <span className="text-sm font-bold">
+                  Código incorrecto. Intentos restantes: {5 - attempts}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {lockoutTime > 0 && (
-            <div className="flex items-center space-x-2 text-orange-400 bg-orange-500/10 px-4 py-3 rounded-xl border border-orange-500/20 justify-center">
-              <Lock className="w-5 h-5" />
-              <span className="text-sm font-semibold text-center leading-tight">
-                Demasiados intentos.<br />Espera {lockoutTime}s
+            <div className="flex items-center gap-3 text-amber-400 glass-card rounded-2xl px-5 py-4 justify-center" style={{ borderColor: 'rgba(245, 158, 11, 0.2)' }}>
+              <Lock className="w-5 h-5 flex-shrink-0" />
+              <span className="text-sm font-bold text-center leading-tight">
+                Demasiados intentos. Espera {lockoutTime}s
               </span>
             </div>
           )}
@@ -202,28 +215,29 @@ export default function App() {
           <button
             type="submit"
             disabled={lockoutTime > 0 || isChecking || !password.trim()}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600/50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl transition-colors flex items-center justify-center space-x-2"
+            className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 disabled:from-zinc-700 disabled:to-zinc-800 disabled:cursor-not-allowed text-zinc-950 font-black py-5 rounded-2xl transition-all flex items-center justify-center gap-3 text-lg active:scale-[0.97] glow-yellow relative overflow-hidden group"
           >
             {isChecking ? (
-              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-6 h-6 border-3 border-zinc-900/30 border-t-zinc-900 rounded-full animate-spin" />
             ) : (
               <>
                 <Lock className="w-5 h-5" />
-                <span>Desbloquear App</span>
+                <span>Desbloquear</span>
               </>
             )}
+            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-[shimmer_2s_infinite]" />
           </button>
-        </form>
+        </motion.form>
       </motion.div>
     );
   };
 
   return (
-    <div className="h-[100dvh] w-full max-w-[412px] mx-auto bg-zinc-950 text-white overflow-hidden font-sans selection:bg-indigo-500/30">
+    <div className="h-[100dvh] w-full bg-zinc-950 text-white overflow-hidden font-sans selection:bg-yellow-500/30">
       {isAuthenticated ? (
         <Suspense fallback={
           <div className="flex items-center justify-center h-full">
-            <div className="w-8 h-8 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+            <div className="w-10 h-10 border-3 border-yellow-500/30 border-t-yellow-400 rounded-full animate-spin" />
           </div>
         }>
           <MainApp />
