@@ -413,23 +413,23 @@ export default function MainApp() {
                     </div>
                 </div>
 
-                <div className="flex-1 px-5 pt-3 pb-32 flex flex-col relative z-30 overflow-y-auto custom-scrollbar">
+                <div className="flex-1 px-5 pt-2 pb-44 flex flex-col relative z-30 overflow-y-auto custom-scrollbar">
                     {step.type === 'exercise' ? (
-                        <div className="flex flex-col flex-1 gap-5 justify-between">
+                        <div className="space-y-5">
                             {/* Block & Series info + Title */}
-                            <div className="space-y-3">
+                            <div className="space-y-2">
                                 <div className="flex justify-between items-center">
                                     <span className="text-xs font-bold text-yellow-400 bg-yellow-500/10 px-3 py-1.5 rounded-xl border border-yellow-500/15 tracking-wide">{step.block}</span>
                                     <span className="text-xs font-bold text-zinc-500 bg-white/5 px-3 py-1.5 rounded-xl">{step.seriesInfo}</span>
                                 </div>
-                                <h2 className="text-[2rem] font-black text-white leading-tight tracking-tight">{step.title}</h2>
+                                <h2 className="text-[1.7rem] font-black text-white leading-snug tracking-tight">{step.title}</h2>
                             </div>
 
                             {/* Reps & Weight cards */}
                             <div className="grid grid-cols-2 gap-3.5">
                                 <button
                                     onClick={openEditSheet}
-                                    className="glass-card-strong rounded-[1.5rem] p-5 text-left relative overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[130px]"
+                                    className="glass-card-strong rounded-[1.5rem] p-4 text-left relative overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[110px]"
                                 >
                                     <div className="absolute top-3 right-3 opacity-0 group-active:opacity-100 transition-opacity">
                                         <Edit2 className="w-3.5 h-3.5 text-zinc-500" />
@@ -446,7 +446,7 @@ export default function MainApp() {
                                 {(modifiedSteps[stepIndex]?.weight || step.weight) ? (
                                     <button
                                         onClick={openEditSheet}
-                                        className="relative rounded-[1.5rem] p-5 text-left overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[130px] bg-gradient-to-br from-yellow-500/10 via-zinc-900 to-zinc-900 border border-yellow-500/15"
+                                        className="relative rounded-[1.5rem] p-4 text-left overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[110px] bg-gradient-to-br from-yellow-500/10 via-zinc-900 to-zinc-900 border border-yellow-500/15"
                                     >
                                         <div className="absolute top-3 right-3 opacity-0 group-active:opacity-100 transition-opacity">
                                             <Edit2 className="w-3.5 h-3.5 text-zinc-500" />
@@ -561,7 +561,7 @@ export default function MainApp() {
                 </div>
 
                 {/* Main Action Button */}
-                <div className="fixed bottom-0 left-0 w-full px-5 pt-4 z-40 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pb-6">
+                <div className="fixed bottom-0 left-0 w-full px-5 pt-6 z-40 bg-gradient-to-t from-zinc-950 via-zinc-950/95 to-transparent pb-4">
                     <button
                         onClick={advanceStep}
                         className={`w-full h-[72px] rounded-2xl font-black text-xl flex items-center justify-center gap-3 active:scale-[0.97] transition-all overflow-hidden relative group
