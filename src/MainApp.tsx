@@ -350,9 +350,9 @@ export default function MainApp() {
                     </div>
                 </div>
 
-                <div className="flex-1 px-4 pt-1 pb-16 flex flex-col justify-center relative z-30">
+                <div className="flex-1 px-4 pt-4 pb-28 flex flex-col relative z-30 overflow-y-auto">
                     {step.type === 'exercise' ? (
-                        <div className="space-y-2.5">
+                        <div className="space-y-3 mt-4">
                             <div className="space-y-1.5">
                                 <div className="flex justify-between items-center text-[11px] font-bold text-yellow-400 tracking-wide">
                                     <span className="bg-yellow-500/10 px-2 py-0.5 rounded-full border border-yellow-500/20">{step.block}</span>
