@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { routines } from './data/routines';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, ChevronRight, CheckCircle, Timer, Dumbbell, Activity, Volume2, X, Share2, Edit2, Pause, ArrowLeft, GripHorizontal } from 'lucide-react';
+import { Play, ChevronRight, CheckCircle, Timer, Dumbbell, Activity, Volume2, X, Share2, Edit2, Pause, ArrowLeft, GripHorizontal, AlertCircle } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
 
 type Screen = 'home' | 'countdown' | 'workout' | 'done';
