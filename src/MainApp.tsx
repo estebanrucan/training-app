@@ -367,26 +367,54 @@ export default function MainApp() {
                             <div className="grid grid-cols-2 gap-4">
                                 <button
                                     onClick={openEditSheet}
-                                    className="bg-white/5 backdrop-blur-xl rounded-[2rem] p-6 text-left border border-white/10 relative overflow-hidden group hover:bg-white/10 active:scale-95 transition-all flex flex-col justify-between h-32"
+                                    className="bg-white/5 backdrop-blur-xl rounded-[2rem] p-5 text-left border border-white/10 relative overflow-hidden group hover:bg-white/10 active:scale-95 transition-all flex flex-col justify-center h-32"
                                 >
                                     <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Edit2 className="w-4 h-4 text-zinc-400" />
                                     </div>
-                                    <div className="text-zinc-400 text-sm font-semibold tracking-wide uppercase">Reps</div>
-                                    <div className="text-4xl font-black text-white">{modifiedSteps[stepIndex]?.reps || step.reps}</div>
+                                    <div className="text-zinc-500 text-xs font-bold tracking-widest uppercase mb-1">Repeticiones</div>
+                                    <div className="flex items-baseline gap-1.5">
+                                        <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter">
+                                            {(modifiedSteps[stepIndex]?.reps || step.reps).replace(/reps?/i, '').trim()}
+                                        </span>
+                                        <span className="text-zinc-400 font-bold text-sm">reps</span>
+                                    </div>
                                 </button>
 
                                 {(modifiedSteps[stepIndex]?.weight || step.weight) ? (
                                     <button
                                         onClick={openEditSheet}
-                                        className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-6 text-left relative overflow-hidden group hover:border-indigo-500/50 active:scale-95 transition-all flex flex-col justify-between h-32"
+                                        className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-5 text-left relative overflow-hidden group hover:border-indigo-500/50 active:scale-95 transition-all flex flex-col justify-center h-32 shadow-xl"
                                     >
-                                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none" />
+                                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent pointer-events-none" />
                                         <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <Edit2 className="w-4 h-4 text-zinc-400" />
                                         </div>
-                                        <div className="text-zinc-400 text-sm font-semibold tracking-wide uppercase">Carga</div>
-                                        <div className="text-4xl font-black text-white">{modifiedSteps[stepIndex]?.weight || step.weight}</div>
+                                        <div className="text-zinc-500 text-xs font-bold tracking-widest uppercase mb-1 relative z-10">Carga</div>
+                                        <div className="flex items-baseline gap-1 leading-none relative z-10">
+                                            {(() => {
+                                                const w = (modifiedSteps[stepIndex]?.weight || step.weight) as string;
+                                                const parts = w.split(' ');
+                                                if (parts.length === 3 && parts[0].includes('x')) {
+                                                    return (
+                                                        <>
+                                                            <span className="text-zinc-400 font-bold text-xl">{parts[0]}</span>
+                                                            <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter">{parts[1]}</span>
+                                                            <span className="text-zinc-400 font-bold text-sm">{parts[2]}</span>
+                                                        </>
+                                                    );
+                                                } else if (parts.length === 2) {
+                                                    return (
+                                                        <>
+                                                            <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter">{parts[0]}</span>
+                                                            <span className="text-zinc-400 font-bold text-sm">{parts[1]}</span>
+                                                        </>
+                                                    );
+                                                } else {
+                                                    return <span className="text-3xl font-black text-white tracking-tighter leading-tight break-words">{w}</span>;
+                                                }
+                                            })()}
+                                        </div>
                                     </button>
                                 ) : (
                                     <div />
