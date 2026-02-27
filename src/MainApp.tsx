@@ -227,7 +227,7 @@ export default function MainApp() {
                 <p className="text-zinc-400 text-center font-medium">Selecciona tu rutina para comenzar</p>
             </div>
 
-            <div className="flex-1 px-6 pb-8 overflow-y-auto space-y-4 z-10">
+            <div className="flex-1 px-6 pb-12 overflow-y-auto space-y-4 z-10">
                 {Object.keys(routines).map((day, idx) => (
                     <motion.button
                         initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 + idx * 0.1 }}
@@ -302,7 +302,7 @@ export default function MainApp() {
                         exerciseStartTimeRef.current = Date.now();
                     }
                 }}
-                className="mt-16 px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:scale-105 active:scale-95 transition-transform shadow-xl shadow-white/10 flex items-center gap-2"
+                className="absolute bottom-12 px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:scale-105 active:scale-95 transition-transform shadow-xl shadow-white/10 flex items-center gap-2 z-50"
             >
                 Saltar Countdown <ChevronRight className="w-5 h-5" />
             </button>
@@ -350,7 +350,7 @@ export default function MainApp() {
                     </div>
                 </div>
 
-                <div className="flex-1 p-6 flex flex-col justify-center relative z-30 pb-32">
+                <div className="flex-1 p-6 flex flex-col justify-center relative z-30 pb-52">
                     {step.type === 'exercise' ? (
                         <div className="space-y-6">
                             <div className="space-y-3">
@@ -525,7 +525,7 @@ export default function MainApp() {
                             />
                             <motion.div
                                 initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                                className="absolute bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 rounded-t-[2.5rem] p-6 pb-12 z-[201] pointer-events-auto shadow-2xl"
+                                className="absolute bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 rounded-t-[3rem] p-6 pb-16 z-[201] pointer-events-auto shadow-2xl"
                             >
                                 <div className="w-12 h-1.5 bg-zinc-700 rounded-full mx-auto mb-8" />
                                 <h3 className="text-2xl font-black text-white mb-6">Ajustar Serie</h3>
@@ -573,7 +573,7 @@ export default function MainApp() {
                             />
                             <motion.div
                                 initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                                className="absolute bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 rounded-t-[2.5rem] p-6 pb-12 z-[201] pointer-events-auto"
+                                className="absolute bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 rounded-t-[3rem] p-6 pb-16 z-[201] pointer-events-auto"
                             >
                                 <div className="w-12 h-1.5 bg-zinc-700 rounded-full mx-auto mb-8" />
                                 <h3 className="text-3xl font-black text-white mb-2">Pausa</h3>
@@ -719,7 +719,7 @@ export default function MainApp() {
                     </div>
                 </div>
 
-                <div className="absolute bottom-0 left-0 w-full p-6 pt-12 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent z-20">
+                <div className="absolute bottom-0 left-0 w-full p-6 pt-12 pb-10 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent z-20">
                     <button
                         onClick={exitToHome}
                         className="w-full py-5 bg-white text-black rounded-full font-black text-lg active:scale-95 transition-transform"
@@ -732,7 +732,7 @@ export default function MainApp() {
     };
 
     return (
-        <div className="h-full w-full relative">
+        <div className="h-[100dvh] w-full relative overflow-hidden bg-zinc-950 text-white selection:bg-indigo-500/30">
             <BackgroundGlow />
             <AnimatePresence mode="wait">
                 {screen === 'home' && renderHome()}
