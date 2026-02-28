@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { routines } from './data/routines';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, ChevronRight, CheckCircle, Timer, Dumbbell, Activity, Volume2, X, Share2, Edit2, Pause, ArrowLeft, GripHorizontal, AlertCircle, Flame, Trophy, Zap, Clock, Target } from 'lucide-react';
+import { Play, ChevronRight, CheckCircle, Timer, Dumbbell, Activity, Volume2, X, Share2, Edit2, Pause, ArrowLeft, GripHorizontal, AlertCircle, Flame, Trophy, Zap, Clock, Target, Thermometer } from 'lucide-react';
 
 type Screen = 'home' | 'countdown' | 'workout' | 'done';
 
@@ -35,6 +35,31 @@ export default function MainApp() {
     const timerRef = useRef<number | null>(null);
     const workoutStartTimeRef = useRef<number | null>(null);
     const exerciseStartTimeRef = useRef<number | null>(null);
+
+    // Live clock
+    const [currentTime, setCurrentTime] = useState(new Date());
+    useEffect(() => {
+        const interval = setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // Santiago temperature from Open-Meteo (free, no API key)
+    const [temperature, setTemperature] = useState<number | null>(null);
+    useEffect(() => {
+        const fetchTemp = () => {
+            fetch('https://api.open-meteo.com/v1/forecast?latitude=-33.45&longitude=-70.65&current=temperature_2m&timezone=America/Santiago')
+                .then(r => r.json())
+                .then(data => {
+                    if (data?.current?.temperature_2m != null) {
+                        setTemperature(Math.round(data.current.temperature_2m));
+                    }
+                })
+                .catch(() => { });
+        };
+        fetchTemp();
+        const interval = setInterval(fetchTemp, 15 * 60 * 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     const startAlarm = () => {
         if (!audioCtxRef.current) {
@@ -220,6 +245,10 @@ export default function MainApp() {
         return routines[day].filter(s => s.type === 'exercise').length;
     };
 
+    const timeHours = currentTime.getHours().toString().padStart(2, '0');
+    const timeMinutes = currentTime.getMinutes().toString().padStart(2, '0');
+    const showColon = currentTime.getSeconds() % 2 === 0;
+
     const renderHome = () => (
         <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -239,10 +268,40 @@ export default function MainApp() {
                     initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}
                 >
                     <h1 className="text-4xl font-black tracking-tight text-white leading-[1.1] mb-1">
-                        Tu <span className="text-gradient-gold">Entrena-</span><br />miento
+                        Hola, <span className="text-gradient-gold">Esteban</span>
                     </h1>
-                    <p className="text-zinc-500 text-sm font-medium mt-2">Selecciona tu rutina para comenzar</p>
                 </motion.div>
+
+                {/* Clock & Weather Row */}
+                <motion.div
+                    initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.18 }}
+                    className="flex items-center gap-3 mt-3"
+                >
+                    {/* Clock pill */}
+                    <div className="flex items-center gap-2 glass-card rounded-2xl px-4 py-2.5">
+                        <Clock className="w-4 h-4 text-yellow-400" />
+                        <span className="text-white font-black text-lg tabular-nums tracking-tight">
+                            {timeHours}<span className={showColon ? 'opacity-100' : 'opacity-30'} style={{ transition: 'opacity 0.3s' }}>:</span>{timeMinutes}
+                        </span>
+                    </div>
+
+                    {/* Temperature pill */}
+                    <div className="flex items-center gap-2 glass-card rounded-2xl px-4 py-2.5">
+                        <Thermometer className="w-4 h-4 text-yellow-400" />
+                        {temperature !== null ? (
+                            <span className="text-white font-black text-lg tabular-nums">{temperature}°C</span>
+                        ) : (
+                            <span className="text-zinc-600 font-bold text-sm">···</span>
+                        )}
+                    </div>
+                </motion.div>
+
+                <motion.p
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}
+                    className="text-zinc-500 text-sm font-medium mt-3"
+                >
+                    Selecciona tu rutina para comenzar
+                </motion.p>
             </div>
 
             {/* Routine Cards */}
@@ -251,7 +310,7 @@ export default function MainApp() {
                     <motion.button
                         initial={{ y: 30, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.2 + idx * 0.08, type: 'spring', stiffness: 300, damping: 30 }}
+                        transition={{ delay: 0.3 + idx * 0.08, type: 'spring', stiffness: 300, damping: 30 }}
                         key={day}
                         onClick={() => handleStartRoutine(day)}
                         className="w-full relative overflow-hidden group rounded-[1.5rem] p-4 flex items-center justify-between transition-all glass-card hover:bg-white/8 active:scale-[0.97]"
