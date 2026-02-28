@@ -25,19 +25,20 @@ export type RestStep = {
 export type WorkoutStep = ExerciseStep | RestStep;
 
 const trenSuperior: WorkoutStep[] = [];
+
 // Bloque 1
 for (let i = 1; i <= 3; i++) {
   trenSuperior.push({
-    type: 'exercise', title: 'Press Inclinado', reps: '8 reps', weight: 'Mancuernas | 2x 15.3 kg', notes: i === 1 ? 'Vamos a despertar ese pectoral superior. Baja contando 3s, escápulas juntas atrás y pecho bien alto. Que se sienta desde la primera rep.' : i === 2 ? 'Ese pectoral ya está caliente, ahora aprieta más arriba. Agarre prono, codos a 45° y no pierdas la tensión al bajar.' : 'Última serie, que ese pecho quede reventado. Cada rep cuenta, baja lento y empuja con todo. Tú puedes.', block: 'Bloque 1: Pecho Alto y Espalda', seriesInfo: `Serie ${i} de 3`,
+    type: 'exercise', title: 'Press Inclinado', reps: '8 reps', weight: 'Mancuernas | 2x 15.3 kg', notes: i === 1 ? 'Vamos a despertar ese pectoral superior. Baja contando 3s, escápulas juntas atrás y pecho bien alto. Que se sienta desde la primera rep.' : i === 2 ? 'Ese pectoral ya está caliente, ahora aprieta más arriba. Agarre prono, codos a 45° y no pierdas la tensión al bajar.' : 'Última serie, que ese pecho quede reventado. Cada rep cuenta, baja lento y empuja con todo. Tú puedes.', block: 'Bloque 1: Pecho Alto y Espalda Vertical', seriesInfo: `Serie ${i} de 3`,
     muscles: [{ name: 'Pectoral Superior', percentage: 60, type: 'primary' }, { name: 'Deltoides Anterior', percentage: 25, type: 'secondary' }, { name: 'Tríceps', percentage: 15, type: 'secondary' }]
   });
   trenSuperior.push({
-    type: 'exercise', title: 'Remo Invertido', reps: '10 reps', weight: 'TRX | 43 kg', notes: i === 1 ? 'Hora de trabajar esa espalda. Cuerpo recto como tabla, tira hasta que el pecho toque las manillas. Siente cómo se activan los dorsales.' : i === 2 ? 'Esa espalda se está poniendo ancha. Jala fuerte, que el pecho llegue arriba. Ajusta la inclinación si necesitas más desafío.' : 'Último remo del bloque, deja la espalda inflada. No aflojes, cada rep te acerca a esa espalda que quieres.', block: 'Bloque 1: Pecho Alto y Espalda', seriesInfo: `Serie ${i} de 3`,
-    muscles: [{ name: 'Dorsal Ancho', percentage: 60, type: 'primary' }, { name: 'Trapecio y Romboides', percentage: 30, type: 'secondary' }, { name: 'Bíceps', percentage: 10, type: 'secondary' }]
+    type: 'exercise', title: 'Jalón Vertical en TRX', reps: '10 reps', weight: 'TRX | Peso corporal', notes: i === 1 ? 'Hora de sacar esas alas. Ancla el TRX alto, siéntate debajo y jala clavando los codos hacia el suelo. Siente cómo se abre ese dorsal desde la primera rep.' : i === 2 ? 'Esa espalda en V se construye aquí. Estira completo arriba y jala con todo hacia abajo. No uses vuelo, puro poder de tu espalda.' : 'Último jalón del bloque, deja esa espalda gigante y reventada. Aprieta abajo como si quisieras romper las cintas. Dale.', block: 'Bloque 1: Pecho Alto y Espalda Vertical', seriesInfo: `Serie ${i} de 3`,
+    muscles: [{ name: 'Dorsal Ancho', percentage: 70, type: 'primary' }, { name: 'Bíceps', percentage: 15, type: 'secondary' }, { name: 'Redondo Mayor', percentage: 15, type: 'secondary' }]
   });
-  if (i < 3) trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Press Inclinado', phrase: i === 1 ? 'Buen superset, ¡ese pecho y esa espalda ya lo están sintiendo! Sacude los brazos y vamos por el siguiente.' : 'Último superset del bloque. Respira profundo, que esta va con todo. Quiero verte apretar cada rep.' });
+  if (i < 3) trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Press Inclinado', phrase: i === 1 ? 'Buen superset, ¡ese pecho y esa espalda ya están bombeados! Sacude los brazos y vamos por el siguiente.' : 'Último superset del bloque. Respira profundo, que esta va con todo. Quiero verte apretar cada rep.' });
 }
-trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Flexiones Agarre Vertical', phrase: 'Primer bloque destruido 💪 Ese pectoral superior ya está trabajando. Ahora vamos por el pecho medio y más espalda.' });
+trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Flexiones Agarre Vertical', phrase: 'Primer bloque destruido 💪 Ese pectoral superior y esos dorsales ya están a fuego. Ahora vamos por el pecho medio y el grosor de la espalda.' });
 
 // Bloque 2
 for (let i = 1; i <= 3; i++) {
@@ -51,24 +52,25 @@ for (let i = 1; i <= 3; i++) {
   });
   if (i < 3) trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Flexiones Agarre Vertical', phrase: i === 1 ? 'Buen trabajo, ese pecho se está marcando. Suelta los brazos, respira y vamos por el siguiente superset.' : 'Queda un superset para cerrar este bloque. Esa espalda y ese pecho van a quedar espectaculares, dale.' });
 }
-trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Curl de Bíceps', phrase: '¡Pecho y espalda listos! Ahora viene lo que se ve: brazos y hombros. Que esos bíceps y deltoides se marquen.' });
+trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Extensiones de Tríceps', phrase: '¡Pecho y espalda listos! Ahora viene el remate de brazos y hombros. Vamos a aislar y reventar lo que queda.' });
 
 // Bloque 3
 for (let i = 1; i <= 3; i++) {
   trenSuperior.push({
-    type: 'exercise', title: 'Curl de Bíceps', reps: '6 reps', weight: 'Mancuernas | 2x 11.8 kg', notes: i === 1 ? 'Agarre martillo, baja en 3s. Codos fijos a los lados, sin balancear. Siente cómo se inflan esos bíceps con cada rep.' : i === 2 ? 'Esos brazos se están poniendo más grandes. No balancees, que el bíceps haga TODO el trabajo. Aprieta arriba.' : 'Última serie de curl. Para que esos brazos se vean más fuertes aún. Cada rep lenta, cada contracción al máximo.', block: 'Bloque 3: Brazos y Hombros', seriesInfo: `Serie ${i} de 3`,
-    muscles: [{ name: 'Bíceps', percentage: 60, type: 'primary' }, { name: 'Braquiorradial', percentage: 30, type: 'secondary' }, { name: 'Flexores del Antebrazo', percentage: 10, type: 'secondary' }]
-  });
-  trenSuperior.push({
-    type: 'exercise', title: 'Extensiones de Tríceps', reps: '10 reps', weight: 'TRX | 28 kg', notes: i === 1 ? 'Codos apuntando al frente, manos hacia tu frente. Extiende apretando fuerte el tríceps. Que esa herradura se marque.' : i === 2 ? 'Ese tríceps ya está ardiendo, ¿lo sientes? Bien, eso es que está creciendo. Mantén los codos fijos y empuja.' : 'Último set de tríceps, que esos brazos queden hinchados. Contrae al máximo en cada extensión, no aflojes.', block: 'Bloque 3: Brazos y Hombros', seriesInfo: `Serie ${i} de 3`,
+    type: 'exercise', title: 'Extensiones de Tríceps', reps: '10 reps', weight: 'TRX | 28 kg', notes: i === 1 ? 'Codos apuntando al frente, manos hacia tu frente. Extiende apretando fuerte el tríceps. Que esa herradura se marque desde ahora.' : i === 2 ? 'Ese tríceps ya está ardiendo, ¿lo sientes? Bien, eso es que está creciendo. Mantén los codos fijos y empuja con todo.' : 'Último set de tríceps, que esos brazos queden hinchados. Contrae al máximo en cada extensión, no aflojes la técnica.', block: 'Bloque 3: Brazos y Hombros', seriesInfo: `Serie ${i} de 3`,
     muscles: [{ name: 'Tríceps', percentage: 85, type: 'primary' }, { name: 'Core', percentage: 15, type: 'secondary' }]
   });
   trenSuperior.push({
-    type: 'exercise', title: 'Elevaciones Laterales', reps: '15 reps', weight: 'Mancuernas | 2x 5.3 kg', notes: i === 1 ? 'Eleva hasta la altura de hombros, codos ligeramente flexionados. Baja en 3s. Que esos deltoides se redondeen.' : i === 2 ? 'Esos hombros se están poniendo anchos. No balancees el torso, deja que el deltoides haga el trabajo. Controla la bajada.' : 'Últimas laterales, que esos hombros queden como bolas. Aprieta arriba y baja lento, siente cada fibra.', block: 'Bloque 3: Brazos y Hombros', seriesInfo: `Serie ${i} de 3`,
+    type: 'exercise', title: 'Elevaciones Laterales', reps: '15 reps', weight: 'Mancuernas | 2x 5.3 kg', notes: i === 1 ? 'Eleva hasta la altura de hombros, codos ligeramente flexionados. Baja en 3s. Que esos deltoides se redondeen.' : i === 2 ? 'Esos hombros se están poniendo anchos. No balancees el torso, deja que el deltoides haga el trabajo. Controla la bajada.' : 'Últimas laterales, que esos hombros queden como bolas. Aprieta arriba y baja lento, siente cada fibra arder.', block: 'Bloque 3: Brazos y Hombros', seriesInfo: `Serie ${i} de 3`,
     muscles: [{ name: 'Deltoides Lateral', percentage: 75, type: 'primary' }, { name: 'Trapecio Superior', percentage: 15, type: 'secondary' }, { name: 'Deltoides Anterior', percentage: 10, type: 'secondary' }]
   });
-  if (i < 3) trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Curl de Bíceps', phrase: i === 1 ? 'Primer tri-set hecho, esos brazos ya se ven más llenos. Sacude las manos y vamos por el segundo.' : 'Último tri-set, que esos brazos y hombros queden reventados. Quiero verte apretar cada rep como si fuera competencia.' });
+  trenSuperior.push({
+    type: 'exercise', title: 'Curl de Bíceps', reps: '6 reps', weight: 'Mancuernas | 2x 11.8 kg', notes: i === 1 ? 'El agarre ya descansó, ahora a exigir esos bíceps. Agarre martillo, baja en 3s. Codos fijos a los lados, sin balancear.' : i === 2 ? 'Esos brazos se están poniendo más grandes. No balancees, que el bíceps haga TODO el trabajo ahora que está fresco. Aprieta arriba.' : 'Última serie de curl y de toda la rutina. Para que esos brazos se vean enormes. Cada rep lenta, cada contracción al máximo. Cierra fuerte.', block: 'Bloque 3: Brazos y Hombros', seriesInfo: `Serie ${i} de 3`,
+    muscles: [{ name: 'Bíceps', percentage: 60, type: 'primary' }, { name: 'Braquiorradial', percentage: 30, type: 'secondary' }, { name: 'Flexores del Antebrazo', percentage: 10, type: 'secondary' }]
+  });
+  if (i < 3) trenSuperior.push({ type: 'rest', duration: 60, nextExercise: 'Extensiones de Tríceps', phrase: i === 1 ? 'Primer tri-set hecho, esos brazos ya se ven más llenos. Sacude las manos y vamos por el segundo.' : 'Último tri-set, que esos brazos y hombros queden reventados. Quiero verte apretar cada rep como si fuera competencia.' });
 }
+
 
 const trenInferior1: WorkoutStep[] = [];
 // Bloque 1
