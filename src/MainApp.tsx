@@ -881,7 +881,7 @@ export default function MainApp() {
                         </motion.div>
                         <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
                             <h2 className="text-2xl font-black text-white leading-none">Entrenamiento <span className="text-gradient-gold">Completado</span></h2>
-                            <p className="text-zinc-500 text-xs font-bold mt-1">{selectedDay} — {getRoutineSubtitle(selectedDay)}</p>
+                            <p className="text-zinc-500 text-xs font-bold mt-1">Esteban — {selectedDay} — {getRoutineSubtitle(selectedDay)}</p>
                         </motion.div>
                     </div>
                     <motion.button
