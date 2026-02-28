@@ -464,7 +464,7 @@ export default function MainApp() {
 
                 <div className="flex-1 px-5 pt-2 pb-28 flex flex-col relative z-30 overflow-hidden">
                     {step.type === 'exercise' ? (
-                        <div className="flex flex-col flex-1 justify-between">
+                        <div className="flex flex-col flex-1 gap-5">
                             {/* Block & Series info + Title */}
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
@@ -865,14 +865,14 @@ export default function MainApp() {
                             <Activity className="w-3 h-3 text-yellow-400" />
                             Log de Ejercicios
                         </h3>
-                        <div className="flex-1 overflow-hidden space-y-1">
+                        <div className="flex-1 overflow-hidden flex flex-col gap-1.5">
                             {exerciseList.map((exercise, idx) => (
                                 <motion.div
                                     key={idx}
                                     initial={{ x: 15, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
                                     transition={{ delay: 0.5 + idx * 0.04 }}
-                                    className="flex items-center gap-2 bg-white/3 border border-white/5 rounded-lg px-3 py-2"
+                                    className="flex items-center gap-2 bg-white/3 border border-white/5 rounded-lg px-3 py-2.5 flex-1"
                                 >
                                     <h4 className="text-white font-bold text-[12px] leading-tight flex-1 min-w-0 truncate">{exercise.title}</h4>
                                     <span className="text-zinc-500 text-[10px] font-bold shrink-0">{exercise.series}S</span>

@@ -68,22 +68,22 @@ for (let i = 1; i <= 3; i++) {
 const trenInferior1: WorkoutStep[] = [];
 // Bloque 1
 trenInferior1.push({
-  type: 'exercise', title: 'Sentadilla con Mancuernas (1.5 Reps)', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Técnica 1.5 reps: baja, sube mitad, baja de nuevo, sube completo. Mantén el pecho alto.', block: 'Bloque 1: Cuádriceps', seriesInfo: 'Serie 1 de 3',
+  type: 'exercise', title: 'Sentadilla con Mancuernas', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Técnica 1.5 reps: baja, sube mitad, baja de nuevo, sube completo. Mantén el pecho alto.', block: 'Bloque 1: Cuádriceps', seriesInfo: 'Serie 1 de 3',
   muscles: [{ name: 'Cuádriceps', percentage: 70, type: 'primary' }, { name: 'Glúteo Mayor', percentage: 20, type: 'secondary' }, { name: 'Core', percentage: 10, type: 'secondary' }]
 });
 trenInferior1.push({ type: 'rest', duration: 120, nextExercise: 'Sentadilla con Mancuernas' });
 trenInferior1.push({
-  type: 'exercise', title: 'Sentadilla con Mancuernas (1.5 Reps)', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Enfócate en mantener el peso a los lados y no encorvarte al subir.', block: 'Bloque 1: Cuádriceps', seriesInfo: 'Serie 2 de 3',
+  type: 'exercise', title: 'Sentadilla con Mancuernas', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Enfócate en mantener el peso a los lados y no encorvarte al subir.', block: 'Bloque 1: Cuádriceps', seriesInfo: 'Serie 2 de 3',
   muscles: [{ name: 'Cuádriceps', percentage: 70, type: 'primary' }, { name: 'Glúteo Mayor', percentage: 20, type: 'secondary' }, { name: 'Core', percentage: 10, type: 'secondary' }]
 });
 trenInferior1.push({ type: 'rest', duration: 120, nextExercise: 'Sentadilla con Mancuernas' });
 trenInferior1.push({
-  type: 'exercise', title: 'Sentadilla con Mancuernas (1.5 Reps)', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Última serie efectiva. Mantén el tiempo bajo tensión.', block: 'Bloque 1: Cuádriceps', seriesInfo: 'Serie 3 de 3',
+  type: 'exercise', title: 'Sentadilla con Mancuernas', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Última serie efectiva. Mantén el tiempo bajo tensión.', block: 'Bloque 1: Cuádriceps', seriesInfo: 'Serie 3 de 3',
   muscles: [{ name: 'Cuádriceps', percentage: 70, type: 'primary' }, { name: 'Glúteo Mayor', percentage: 20, type: 'secondary' }, { name: 'Core', percentage: 10, type: 'secondary' }]
 });
 trenInferior1.push({ type: 'rest', duration: 10, nextExercise: 'Sentadilla con Mancuernas (Fallo)' });
 trenInferior1.push({
-  type: 'exercise', title: 'Sentadilla con Mancuernas (Rest-Pause)', reps: 'Al fallo', weight: '2x 15.3 kg', notes: 'Saca todas las reps extra posibles. Respira profundo, pero no pierdas la postura técnica.', block: 'Bloque 1: Cuádriceps', seriesInfo: 'Serie 3 (Extra)',
+  type: 'exercise', title: 'Sentadilla con Mancuernas', reps: 'Al fallo', weight: '2x 15.3 kg', notes: 'Saca todas las reps extra posibles. Respira profundo, pero no pierdas la postura técnica.', block: 'Bloque 1: Cuádriceps', seriesInfo: 'Serie 3 (Extra)',
   muscles: [{ name: 'Cuádriceps', percentage: 80, type: 'primary' }, { name: 'Glúteo Mayor', percentage: 15, type: 'secondary' }]
 });
 
@@ -146,14 +146,14 @@ trenInferior2.push({
   type: 'exercise', title: 'Peso Muerto Tradicional con Mancuernas', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Desde el suelo. Mantén las mancuernas pegadas al centro de gravedad.', block: 'Bloque 1: Cadena Posterior', seriesInfo: 'Serie 2 de 3',
   muscles: [{ name: 'Glúteo Mayor', percentage: 40, type: 'primary' }, { name: 'Isquiotibiales', percentage: 30, type: 'primary' }, { name: 'Erectores Espinales', percentage: 20, type: 'secondary' }]
 });
-trenInferior2.push({ type: 'rest', duration: 120, nextExercise: 'Peso Muerto Tradicional' });
+trenInferior2.push({ type: 'rest', duration: 120, nextExercise: 'Peso Muerto Tradicional con Mancuernas' });
 trenInferior2.push({
   type: 'exercise', title: 'Peso Muerto Tradicional con Mancuernas', reps: '8 reps', weight: '2x 15.3 kg', notes: 'Desde el suelo. Última serie, mantén la concentración en no curvar la espalda baja.', block: 'Bloque 1: Cadena Posterior', seriesInfo: 'Serie 3 de 3',
   muscles: [{ name: 'Glúteo Mayor', percentage: 40, type: 'primary' }, { name: 'Isquiotibiales', percentage: 30, type: 'primary' }, { name: 'Erectores Espinales', percentage: 20, type: 'secondary' }]
 });
-trenInferior2.push({ type: 'rest', duration: 10, nextExercise: 'Peso Muerto Tradicional' });
+trenInferior2.push({ type: 'rest', duration: 10, nextExercise: 'Peso Muerto Tradicional con Mancuernas' });
 trenInferior2.push({
-  type: 'exercise', title: 'Peso Muerto Tradicional', reps: 'Al fallo', weight: '2x 15.3 kg', notes: 'Saca las repeticiones extra al fallo técnico (sin perder la postura).', block: 'Bloque 1: Cadena Posterior', seriesInfo: 'Serie 3 (Extra)',
+  type: 'exercise', title: 'Peso Muerto Tradicional con Mancuernas', reps: 'Al fallo', weight: '2x 15.3 kg', notes: 'Saca las repeticiones extra al fallo técnico (sin perder la postura).', block: 'Bloque 1: Cadena Posterior', seriesInfo: 'Serie 3 (Extra)',
   muscles: [{ name: 'Glúteo Mayor', percentage: 45, type: 'primary' }, { name: 'Isquiotibiales', percentage: 35, type: 'primary' }]
 });
 
