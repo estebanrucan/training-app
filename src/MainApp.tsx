@@ -367,17 +367,17 @@ export default function MainApp() {
                     initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}
                     className="flex-1 overflow-hidden px-5 pb-20"
                 >
-                    <div className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.15em] mb-3 flex items-center gap-2 pl-1">
+                    <div className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.15em] mb-2 flex items-center gap-2 pl-1">
                         <Dumbbell className="w-3 h-3" /> Resumen del entrenamiento
                     </div>
                     <div className="space-y-1.5">
                         {Object.entries(exercisesByBlock).map(([block, exercises], blockIdx) => (
-                            <div key={block} className="glass-card rounded-2xl p-3.5 space-y-2">
+                            <div key={block} className="glass-card rounded-xl p-2.5 space-y-1">
                                 <div className="text-[10px] font-bold text-yellow-400/80 tracking-wide uppercase">{block}</div>
                                 {exercises.map((ex, exIdx) => (
                                     <div key={exIdx} className="flex items-center justify-between gap-2">
                                         <div className="flex-1 min-w-0">
-                                            <div className="text-white font-bold text-[13px] leading-tight truncate">{ex.title}</div>
+                                            <div className="text-white font-bold text-[12px] leading-tight truncate">{ex.title}</div>
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0">
                                             <span className="text-[11px] font-bold text-zinc-400 bg-white/5 px-2 py-0.5 rounded-lg">{ex.count}x{ex.reps.replace(/reps?/i, '').trim()}</span>
@@ -404,7 +404,7 @@ export default function MainApp() {
                                 exerciseStartTimeRef.current = Date.now();
                             }
                         }}
-                        className="w-full h-[64px] bg-white text-zinc-950 rounded-2xl font-black text-lg active:scale-95 transition-all shadow-[0_10px_40px_rgba(255,255,255,0.08)] flex items-center justify-center gap-2"
+                        className="w-full h-[52px] bg-white text-zinc-950 rounded-2xl font-black text-base active:scale-95 transition-all shadow-[0_10px_40px_rgba(255,255,255,0.08)] flex items-center justify-center gap-2"
                     >
                         Saltar <ChevronRight className="w-5 h-5" />
                     </button>
@@ -811,95 +811,80 @@ export default function MainApp() {
                 {/* Celebration background */}
                 <div className="absolute top-[-25%] left-[-25%] w-[150%] h-[55%] bg-gradient-to-b from-yellow-500/20 via-amber-600/10 to-transparent rounded-full blur-3xl pointer-events-none animate-glow-pulse" />
 
-                {/* Header */}
-                <div className="pt-8 px-5 pb-3 relative z-10 flex justify-between items-start">
-                    <div>
+                {/* Header — single line */}
+                <div className="pt-6 px-5 pb-2 relative z-10 flex justify-between items-center">
+                    <div className="flex items-center gap-3">
                         <motion.div
                             initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring' }}
-                            className="inline-flex items-center gap-2 px-3 py-1 glass-card text-yellow-400 rounded-xl text-xs font-bold mb-2 tracking-wide"
+                            className="w-11 h-11 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center glow-yellow shrink-0"
                         >
-                            <Trophy className="w-3.5 h-3.5" /> {selectedDay}
+                            <Trophy className="w-5 h-5 text-zinc-950" />
                         </motion.div>
-                        <motion.h2
-                            initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}
-                            className="text-3xl font-black text-white leading-tight"
-                        >
-                            Entrenamiento<br />
-                            <span className="text-gradient-gold">Completado</span>
-                        </motion.h2>
+                        <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
+                            <h2 className="text-2xl font-black text-white leading-none">Entrenamiento <span className="text-gradient-gold">Completado</span></h2>
+                            <p className="text-zinc-500 text-xs font-bold mt-1">{selectedDay} — {getRoutineSubtitle(selectedDay)}</p>
+                        </motion.div>
                     </div>
                     <motion.button
                         initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4, type: 'spring' }}
                         onClick={handleShare}
-                        className="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl text-zinc-950 active:scale-90 transition-all glow-yellow"
+                        className="w-9 h-9 flex items-center justify-center glass-card rounded-xl text-zinc-400 active:scale-90 transition-all shrink-0"
                     >
-                        <Share2 className="w-5 h-5" />
+                        <Share2 className="w-4 h-4" />
                     </motion.button>
                 </div>
 
-                {/* Stats */}
+                {/* Stats — compact inline row */}
                 <motion.div
-                    initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}
-                    className="px-5 flex gap-2.5 relative z-10 mb-3"
+                    initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}
+                    className="px-5 flex gap-2 relative z-10 mb-2"
                 >
-                    <div className="flex-1 glass-card-strong p-3 rounded-2xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/15 blur-xl rounded-full translate-x-1/2 -translate-y-1/2" />
-                        <div className="flex items-center gap-2 mb-1">
-                            <Clock className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">Tiempo</span>
+                    <div className="flex-1 glass-card p-2.5 rounded-xl flex items-center gap-2.5">
+                        <Clock className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <div>
+                            <div className="text-zinc-500 text-[9px] font-bold uppercase tracking-wider leading-none">Tiempo</div>
+                            <div className="text-base font-black text-white leading-tight">{formatTime(totalWorkoutTime)}</div>
                         </div>
-                        <div className="text-xl font-black text-white">{formatTime(totalWorkoutTime)}</div>
                     </div>
-                    <div className="flex-1 glass-card-strong p-3 rounded-2xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-yellow-500/15 blur-xl rounded-full translate-x-1/2 -translate-y-1/2" />
-                        <div className="flex items-center gap-2 mb-1">
-                            <Flame className="w-3.5 h-3.5 text-yellow-400" />
-                            <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">Series</span>
+                    <div className="flex-1 glass-card p-2.5 rounded-xl flex items-center gap-2.5">
+                        <Flame className="w-4 h-4 text-yellow-400 shrink-0" />
+                        <div>
+                            <div className="text-zinc-500 text-[9px] font-bold uppercase tracking-wider leading-none">Series</div>
+                            <div className="text-base font-black text-white leading-tight">{workoutStats.length}</div>
                         </div>
-                        <div className="text-xl font-black text-white">{workoutStats.length}</div>
                     </div>
                 </motion.div>
 
-                {/* Exercise Log */}
+                {/* Exercise Log — ultra compact single-row items */}
                 <motion.div
-                    initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }}
-                    className="flex-1 px-5 min-h-0 relative z-10 pb-20"
+                    initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }}
+                    className="flex-1 px-5 min-h-0 relative z-10 pb-[72px]"
                 >
-                    <div className="h-full glass-card-strong rounded-[1.5rem] p-4 flex flex-col overflow-hidden">
-                        <h3 className="text-[10px] font-bold text-zinc-500 mb-4 px-1 uppercase tracking-[0.15em] flex items-center gap-2">
-                            <Activity className="w-3.5 h-3.5 text-yellow-400" />
+                    <div className="h-full glass-card rounded-2xl p-3 flex flex-col overflow-hidden">
+                        <h3 className="text-[9px] font-bold text-zinc-500 mb-2 px-1 uppercase tracking-[0.15em] flex items-center gap-1.5">
+                            <Activity className="w-3 h-3 text-yellow-400" />
                             Log de Ejercicios
                         </h3>
-                        <div className="flex-1 overflow-hidden space-y-2 pr-1 pb-2">
+                        <div className="flex-1 overflow-hidden space-y-1">
                             {exerciseList.map((exercise, idx) => (
                                 <motion.div
                                     key={idx}
-                                    initial={{ x: 20, opacity: 0 }}
+                                    initial={{ x: 15, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.6 + idx * 0.05 }}
-                                    className="bg-white/3 border border-white/5 rounded-xl p-3"
+                                    transition={{ delay: 0.5 + idx * 0.04 }}
+                                    className="flex items-center gap-2 bg-white/3 border border-white/5 rounded-lg px-3 py-2"
                                 >
-                                    <div className="flex justify-between items-start mb-2">
-                                        <h4 className="text-white font-bold text-sm leading-tight pr-3">{exercise.title}</h4>
-                                        <div className="bg-white/8 text-zinc-300 px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap">{exercise.series}S</div>
-                                    </div>
-                                    <div className="flex justify-between items-end mt-2">
-                                        <div className="space-y-1 min-w-0 pr-3">
-                                            {Array.from(exercise.reps).length > 0 && (
-                                                <div className="text-yellow-200/70 text-[11px] font-semibold truncate">
-                                                    {Array.from(exercise.reps).join(' / ')}
-                                                </div>
-                                            )}
-                                            {Array.from(exercise.weights).length > 0 && (
-                                                <div className="text-zinc-500 text-[11px] font-semibold truncate">
-                                                    {Array.from(exercise.weights).join(' / ')}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="text-emerald-400 font-black text-sm tabular-nums whitespace-nowrap flex items-center gap-1">
-                                            <Zap className="w-3 h-3" />
-                                            {calculateScore(exercise)}
-                                        </div>
+                                    <h4 className="text-white font-bold text-[12px] leading-tight flex-1 min-w-0 truncate">{exercise.title}</h4>
+                                    <span className="text-zinc-500 text-[10px] font-bold shrink-0">{exercise.series}S</span>
+                                    {Array.from(exercise.reps).length > 0 && (
+                                        <span className="text-yellow-200/60 text-[10px] font-semibold shrink-0">{Array.from(exercise.reps).join('/')}</span>
+                                    )}
+                                    {Array.from(exercise.weights).length > 0 && (
+                                        <span className="text-zinc-500 text-[10px] font-semibold shrink-0">{Array.from(exercise.weights)[0]}</span>
+                                    )}
+                                    <div className="text-emerald-400 font-black text-[11px] tabular-nums shrink-0 flex items-center gap-0.5">
+                                        <Zap className="w-2.5 h-2.5" />
+                                        {calculateScore(exercise)}
                                     </div>
                                 </motion.div>
                             ))}
@@ -908,10 +893,10 @@ export default function MainApp() {
                 </motion.div>
 
                 {/* Bottom Button */}
-                <div className="absolute bottom-0 left-0 w-full p-5 pt-8 pb-6 bg-gradient-to-t from-zinc-950 via-zinc-950/90 to-transparent z-20">
+                <div className="absolute bottom-0 left-0 w-full px-5 pt-6 pb-4 bg-gradient-to-t from-zinc-950 via-zinc-950/90 to-transparent z-20">
                     <button
                         onClick={exitToHome}
-                        className="w-full py-5 bg-white text-zinc-950 rounded-2xl font-black text-lg active:scale-95 transition-all"
+                        className="w-full py-4 bg-white text-zinc-950 rounded-2xl font-black text-base active:scale-95 transition-all"
                     >
                         Volver al Inicio
                     </button>
