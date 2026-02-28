@@ -26,6 +26,7 @@ export default function MainApp() {
 
     const [workoutStats, setWorkoutStats] = useState<{ title: string, duration: number, block: string, seriesInfo: string, reps: string, weight: string }[]>([]);
     const [modifiedSteps, setModifiedSteps] = useState<Record<number, { reps?: string, weight?: string }>>({});
+    const [finalWorkoutTime, setFinalWorkoutTime] = useState(0);
 
     const [showEditSheet, setShowEditSheet] = useState(false);
     const [editForm, setEditForm] = useState({ reps: '', weight: '' });
@@ -179,6 +180,8 @@ export default function MainApp() {
                 exerciseStartTimeRef.current = Date.now();
             }
         } else {
+            const totalTime = workoutStartTimeRef.current ? Math.floor((Date.now() - workoutStartTimeRef.current) / 1000) : 0;
+            setFinalWorkoutTime(totalTime);
             setScreen('done');
         }
     };
@@ -822,7 +825,7 @@ export default function MainApp() {
             return m > 0 ? `${m}m ${s}s` : `${s}s`;
         };
 
-        const totalWorkoutTime = workoutStartTimeRef.current ? Math.floor((Date.now() - workoutStartTimeRef.current) / 1000) : 0;
+        const activeTime = workoutStats.reduce((sum, s) => sum + s.duration, 0);
 
         type ExerciseGroup = { title: string, duration: number, series: number, weights: Set<string>, reps: Set<string>, rawStats: typeof workoutStats };
         const groupedExercises = workoutStats.reduce((acc, stat) => {
@@ -901,8 +904,15 @@ export default function MainApp() {
                     <div className="flex-1 glass-card p-2.5 rounded-xl flex items-center gap-2.5">
                         <Clock className="w-4 h-4 text-emerald-400 shrink-0" />
                         <div>
-                            <div className="text-zinc-500 text-[9px] font-bold uppercase tracking-wider leading-none">Tiempo</div>
-                            <div className="text-base font-black text-white leading-tight">{formatTime(totalWorkoutTime)}</div>
+                            <div className="text-zinc-500 text-[9px] font-bold uppercase tracking-wider leading-none">Total</div>
+                            <div className="text-base font-black text-white leading-tight">{formatTime(finalWorkoutTime)}</div>
+                        </div>
+                    </div>
+                    <div className="flex-1 glass-card p-2.5 rounded-xl flex items-center gap-2.5">
+                        <Zap className="w-4 h-4 text-orange-400 shrink-0" />
+                        <div>
+                            <div className="text-zinc-500 text-[9px] font-bold uppercase tracking-wider leading-none">Sin pausas</div>
+                            <div className="text-base font-black text-white leading-tight">{formatTime(activeTime)}</div>
                         </div>
                     </div>
                     <div className="flex-1 glass-card p-2.5 rounded-xl flex items-center gap-2.5">
@@ -942,8 +952,8 @@ export default function MainApp() {
                                         <span className="text-zinc-500 text-[10px] font-semibold shrink-0">{Array.from(exercise.weights)[0]}</span>
                                     )}
                                     <div className="text-emerald-400 font-black text-[11px] tabular-nums shrink-0 flex items-center gap-0.5">
-                                        <Zap className="w-2.5 h-2.5" />
-                                        {calculateScore(exercise)}
+                                        <Clock className="w-2.5 h-2.5" />
+                                        {formatTime(exercise.duration)}
                                     </div>
                                 </motion.div>
                             ))}
