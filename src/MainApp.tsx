@@ -444,7 +444,7 @@ export default function MainApp() {
                                         <div className="flex items-center gap-2 shrink-0">
                                             <span className="text-[11px] font-bold text-zinc-400 bg-white/5 px-2 py-0.5 rounded-lg">{ex.count}x{ex.reps.replace(/reps?/i, '').trim()}</span>
                                             {ex.weight && (
-                                                <span className="text-[11px] font-bold text-yellow-400/70 bg-yellow-500/8 px-2 py-0.5 rounded-lg">{ex.weight}</span>
+                                                <span className="text-[11px] font-bold text-yellow-400/70 bg-yellow-500/8 px-2 py-0.5 rounded-lg">{ex.weight.includes('|') ? ex.weight.split('|')[1].trim() : ex.weight}</span>
                                             )}
                                         </div>
                                     </div>
@@ -563,28 +563,36 @@ export default function MainApp() {
                                             <Edit2 className="w-3.5 h-3.5 text-zinc-500" />
                                         </div>
                                         <div className="text-zinc-500 text-[11px] font-bold tracking-[0.12em] uppercase mb-2 relative z-10">Carga</div>
-                                        <div className="flex items-baseline gap-1 leading-none relative z-10">
+                                        <div className="flex flex-col gap-1 relative z-10">
                                             {(() => {
-                                                const w = (modifiedSteps[stepIndex]?.weight || step.weight) as string;
+                                                const rawW = (modifiedSteps[stepIndex]?.weight || step.weight) as string;
+                                                const hasEquip = rawW.includes('|');
+                                                const equipLabel = hasEquip ? rawW.split('|')[0].trim() : null;
+                                                const w = hasEquip ? rawW.split('|')[1].trim() : rawW;
                                                 const parts = w.split(' ');
-                                                if (parts.length === 3 && parts[0].includes('x')) {
-                                                    return (
-                                                        <>
-                                                            <span className="text-yellow-400/70 font-bold text-xl">{parts[0]}</span>
-                                                            <span className="text-5xl font-black text-white tracking-tighter">{parts[1]}</span>
-                                                            <span className="text-zinc-500 font-bold text-xs">{parts[2]}</span>
-                                                        </>
-                                                    );
-                                                } else if (parts.length === 2) {
-                                                    return (
-                                                        <>
-                                                            <span className="text-5xl font-black text-white tracking-tighter">{parts[0]}</span>
-                                                            <span className="text-zinc-500 font-bold text-xs">{parts[1]}</span>
-                                                        </>
-                                                    );
-                                                } else {
-                                                    return <span className="text-3xl font-black text-white tracking-tighter leading-tight break-words">{w}</span>;
-                                                }
+                                                return (
+                                                    <>
+                                                        {equipLabel && (
+                                                            <span className="text-zinc-500 font-bold text-[10px] uppercase tracking-wider">{equipLabel}</span>
+                                                        )}
+                                                        <div className="flex items-baseline gap-1 leading-none">
+                                                            {parts.length === 3 && parts[0].includes('x') ? (
+                                                                <>
+                                                                    <span className="text-yellow-400/70 font-bold text-xl">{parts[0]}</span>
+                                                                    <span className="text-5xl font-black text-white tracking-tighter">{parts[1]}</span>
+                                                                    <span className="text-zinc-500 font-bold text-xs">{parts[2]}</span>
+                                                                </>
+                                                            ) : parts.length === 2 ? (
+                                                                <>
+                                                                    <span className="text-5xl font-black text-white tracking-tighter">{parts[0]}</span>
+                                                                    <span className="text-zinc-500 font-bold text-xs">{parts[1]}</span>
+                                                                </>
+                                                            ) : (
+                                                                <span className="text-3xl font-black text-white tracking-tighter leading-tight break-words">{w}</span>
+                                                            )}
+                                                        </div>
+                                                    </>
+                                                );
                                             })()}
                                         </div>
                                     </button>
@@ -855,9 +863,10 @@ export default function MainApp() {
         const exerciseList = Object.values(groupedExercises) as ExerciseGroup[];
 
         const extractNumber = (str: string) => {
-            const multMatch = str.match(/(\d+)x\s*([\d.]+)/);
+            const cleanStr = str.includes('|') ? str.split('|')[1].trim() : str;
+            const multMatch = cleanStr.match(/(\d+)x\s*([\d.]+)/);
             if (multMatch) return parseFloat(multMatch[1]) * parseFloat(multMatch[2]);
-            const numMatch = str.match(/[\d.]+/);
+            const numMatch = cleanStr.match(/[\d.]+/);
             return numMatch ? parseFloat(numMatch[0]) : 0;
         };
 
@@ -961,7 +970,7 @@ export default function MainApp() {
                                         <span className="text-yellow-200/60 text-[10px] font-semibold shrink-0">{Array.from(exercise.reps).join('/')}</span>
                                     )}
                                     {Array.from(exercise.weights).length > 0 && (
-                                        <span className="text-zinc-500 text-[10px] font-semibold shrink-0">{Array.from(exercise.weights)[0]}</span>
+                                        <span className="text-zinc-500 text-[10px] font-semibold shrink-0">{(() => { const w = Array.from(exercise.weights)[0]; return w.includes('|') ? w.split('|')[1].trim() : w; })()}</span>
                                     )}
                                     <div className="text-emerald-400 font-black text-[11px] tabular-nums shrink-0 flex items-center gap-0.5">
                                         <Clock className="w-2.5 h-2.5" />
