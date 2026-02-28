@@ -8,6 +8,7 @@
 /* ===== Samsung S23 Ultra Safe Areas ===== */
 html,
 body {
+  overflow: hidden;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
