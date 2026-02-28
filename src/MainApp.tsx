@@ -462,30 +462,30 @@ export default function MainApp() {
                     </div>
                 </div>
 
-                <div className="flex-1 px-5 pt-2 pb-24 flex flex-col relative z-30 overflow-hidden">
+                <div className="flex-1 px-5 pt-2 pb-28 flex flex-col relative z-30 overflow-hidden">
                     {step.type === 'exercise' ? (
-                        <div className="space-y-3">
+                        <div className="flex flex-col flex-1 justify-between">
                             {/* Block & Series info + Title */}
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
                                     <span className="text-xs font-bold text-yellow-400 bg-yellow-500/10 px-3 py-1.5 rounded-xl border border-yellow-500/15 tracking-wide">{step.block}</span>
                                     <span className="text-xs font-bold text-zinc-500 bg-white/5 px-3 py-1.5 rounded-xl">{step.seriesInfo}</span>
                                 </div>
-                                <h2 className="text-2xl font-black text-white leading-snug tracking-tight">{step.title}</h2>
+                                <h2 className="text-[1.6rem] font-black text-white leading-snug tracking-tight">{step.title}</h2>
                             </div>
 
                             {/* Reps & Weight cards */}
-                            <div className="grid grid-cols-2 gap-3.5">
+                            <div className="grid grid-cols-2 gap-3">
                                 <button
                                     onClick={openEditSheet}
-                                    className="glass-card-strong rounded-[1.5rem] p-3 text-left relative overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[85px]"
+                                    className="glass-card-strong rounded-[1.5rem] p-4 text-left relative overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[100px]"
                                 >
                                     <div className="absolute top-3 right-3 opacity-0 group-active:opacity-100 transition-opacity">
                                         <Edit2 className="w-3.5 h-3.5 text-zinc-500" />
                                     </div>
-                                    <div className="text-zinc-500 text-[10px] font-bold tracking-[0.12em] uppercase mb-1">Repeticiones</div>
+                                    <div className="text-zinc-500 text-[11px] font-bold tracking-[0.12em] uppercase mb-2">Repeticiones</div>
                                     <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl font-black text-white tracking-tighter">
+                                        <span className="text-5xl font-black text-white tracking-tighter">
                                             {(modifiedSteps[stepIndex]?.reps || step.reps).replace(/reps?/i, '').trim()}
                                         </span>
                                         <span className="text-zinc-500 font-bold text-xs">reps</span>
@@ -495,12 +495,12 @@ export default function MainApp() {
                                 {(modifiedSteps[stepIndex]?.weight || step.weight) ? (
                                     <button
                                         onClick={openEditSheet}
-                                        className="relative rounded-[1.5rem] p-3 text-left overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[85px] bg-gradient-to-br from-yellow-500/10 via-zinc-900 to-zinc-900 border border-yellow-500/15"
+                                        className="relative rounded-[1.5rem] p-4 text-left overflow-hidden group active:scale-[0.97] transition-all flex flex-col justify-center min-h-[100px] bg-gradient-to-br from-yellow-500/10 via-zinc-900 to-zinc-900 border border-yellow-500/15"
                                     >
                                         <div className="absolute top-3 right-3 opacity-0 group-active:opacity-100 transition-opacity">
                                             <Edit2 className="w-3.5 h-3.5 text-zinc-500" />
                                         </div>
-                                        <div className="text-zinc-500 text-[10px] font-bold tracking-[0.12em] uppercase mb-1 relative z-10">Carga</div>
+                                        <div className="text-zinc-500 text-[11px] font-bold tracking-[0.12em] uppercase mb-2 relative z-10">Carga</div>
                                         <div className="flex items-baseline gap-1 leading-none relative z-10">
                                             {(() => {
                                                 const w = (modifiedSteps[stepIndex]?.weight || step.weight) as string;
@@ -508,15 +508,15 @@ export default function MainApp() {
                                                 if (parts.length === 3 && parts[0].includes('x')) {
                                                     return (
                                                         <>
-                                                            <span className="text-yellow-400/70 font-bold text-lg">{parts[0]}</span>
-                                                            <span className="text-4xl font-black text-white tracking-tighter">{parts[1]}</span>
+                                                            <span className="text-yellow-400/70 font-bold text-xl">{parts[0]}</span>
+                                                            <span className="text-5xl font-black text-white tracking-tighter">{parts[1]}</span>
                                                             <span className="text-zinc-500 font-bold text-xs">{parts[2]}</span>
                                                         </>
                                                     );
                                                 } else if (parts.length === 2) {
                                                     return (
                                                         <>
-                                                            <span className="text-4xl font-black text-white tracking-tighter">{parts[0]}</span>
+                                                            <span className="text-5xl font-black text-white tracking-tighter">{parts[0]}</span>
                                                             <span className="text-zinc-500 font-bold text-xs">{parts[1]}</span>
                                                         </>
                                                     );
@@ -532,24 +532,24 @@ export default function MainApp() {
                             </div>
 
                             {/* Tips */}
-                            <div className="bg-gradient-to-br from-yellow-950/30 to-yellow-950/10 backdrop-blur-md rounded-xl p-3 border border-yellow-500/15">
-                                <div className="text-yellow-400/80 text-[10px] mb-1 font-bold uppercase tracking-[0.15em] flex items-center gap-2">
-                                    <Zap className="w-3 h-3" /> Técnica
+                            <div className="bg-gradient-to-br from-yellow-950/30 to-yellow-950/10 backdrop-blur-md rounded-2xl p-4 border border-yellow-500/15">
+                                <div className="text-yellow-400/80 text-[10px] mb-2 font-bold uppercase tracking-[0.15em] flex items-center gap-2">
+                                    <Zap className="w-3.5 h-3.5" /> Técnica
                                 </div>
-                                <p className="text-yellow-100/80 text-sm leading-snug font-medium">{step.notes}</p>
+                                <p className="text-yellow-100/80 text-[15px] leading-relaxed font-medium">{step.notes}</p>
                             </div>
 
                             {/* Muscle Activation */}
                             {step.muscles && step.muscles.length > 0 && (
-                                <div className="space-y-2">
+                                <div className="space-y-2.5">
                                     <div className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.15em] pl-1 flex items-center gap-2">
                                         <Target className="w-3 h-3" /> Activación Muscular
                                     </div>
-                                    <div className="flex flex-wrap gap-1.5">
+                                    <div className="flex flex-wrap gap-2">
                                         {step.muscles.map((muscle: any, idx: number) => (
                                             <div
                                                 key={idx}
-                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold border flex items-center gap-1.5
+                                                className={`px-3.5 py-2 rounded-xl text-sm font-bold border flex items-center gap-2
                           ${muscle.type === 'primary'
                                                         ? 'bg-emerald-500/8 text-emerald-400 border-emerald-500/15'
                                                         : 'bg-white/3 text-zinc-400 border-white/8'
