@@ -24,7 +24,7 @@ export default function MainApp() {
 
     const [isPauseMenuOpen, setIsPauseMenuOpen] = useState(false);
 
-    const [workoutStats, setWorkoutStats] = useState<{ title: string, duration: number, block: string, seriesInfo: string, reps: string, weight: string }[]>([]);
+    const [workoutStats, setWorkoutStats] = useState<{ title: string, duration: number, block: string, seriesInfo: string, reps: string, weight: string, startTimeRel: number, endTimeRel: number }[]>([]);
     const [modifiedSteps, setModifiedSteps] = useState<Record<number, { reps?: string, weight?: string }>>({});
     const [finalWorkoutTime, setFinalWorkoutTime] = useState(0);
 
@@ -157,8 +157,12 @@ export default function MainApp() {
         const routine = routines[selectedDay];
         const currentStep = routine[stepIndex];
 
-        if (currentStep && currentStep.type === 'exercise' && exerciseStartTimeRef.current) {
-            const duration = Math.floor((Date.now() - exerciseStartTimeRef.current) / 1000);
+        if (currentStep && currentStep.type === 'exercise' && exerciseStartTimeRef.current && workoutStartTimeRef.current) {
+            const now = Date.now();
+            const duration = Math.floor((now - exerciseStartTimeRef.current) / 1000);
+            const startTimeRel = Math.floor((exerciseStartTimeRef.current - workoutStartTimeRef.current) / 1000);
+            const endTimeRel = Math.floor((now - workoutStartTimeRef.current) / 1000);
+
             const currentModified = modifiedSteps[stepIndex] || {};
             setWorkoutStats(prev => [...prev, {
                 title: currentStep.title,
@@ -166,7 +170,9 @@ export default function MainApp() {
                 block: currentStep.block,
                 seriesInfo: currentStep.seriesInfo,
                 reps: currentModified.reps || currentStep.reps,
-                weight: currentModified.weight || currentStep.weight || ''
+                weight: currentModified.weight || currentStep.weight || '',
+                startTimeRel,
+                endTimeRel
             }]);
             exerciseStartTimeRef.current = null;
         }
@@ -848,19 +854,49 @@ export default function MainApp() {
         const activeTime = workoutStats.reduce((sum, s) => sum + s.duration, 0);
 
         type ExerciseGroup = { title: string, duration: number, series: number, weights: Set<string>, reps: Set<string>, rawStats: typeof workoutStats };
-        const groupedExercises = workoutStats.reduce((acc, stat) => {
-            if (!acc[stat.title]) {
-                acc[stat.title] = { title: stat.title, duration: 0, series: 0, weights: new Set(), reps: new Set(), rawStats: [] };
-            }
-            acc[stat.title].series += 1;
-            acc[stat.title].duration += stat.duration;
-            acc[stat.title].rawStats.push(stat);
-            if (stat.weight) acc[stat.title].weights.add(stat.weight);
-            if (stat.reps) acc[stat.title].reps.add(stat.reps);
-            return acc;
-        }, {} as Record<string, ExerciseGroup>);
+        type BlockGroup = { name: string, startTime: number, endTime: number, exercises: Record<string, ExerciseGroup> };
 
-        const exerciseList = Object.values(groupedExercises) as ExerciseGroup[];
+        const blocks = workoutStats.reduce<Record<string, BlockGroup>>((acc, stat) => {
+            if (!acc[stat.block]) {
+                acc[stat.block] = {
+                    name: stat.block,
+                    startTime: stat.startTimeRel,
+                    endTime: stat.endTimeRel,
+                    exercises: {}
+                };
+            }
+
+            acc[stat.block].startTime = Math.min(acc[stat.block].startTime, stat.startTimeRel);
+            acc[stat.block].endTime = Math.max(acc[stat.block].endTime, stat.endTimeRel);
+
+            if (!acc[stat.block].exercises[stat.title]) {
+                acc[stat.block].exercises[stat.title] = {
+                    title: stat.title,
+                    duration: 0,
+                    series: 0,
+                    weights: new Set(),
+                    reps: new Set(),
+                    rawStats: []
+                };
+            }
+
+            const ex = acc[stat.block].exercises[stat.title];
+            ex.series += 1;
+            ex.duration += stat.duration;
+            ex.rawStats.push(stat);
+            if (stat.weight) ex.weights.add(stat.weight);
+            if (stat.reps) ex.reps.add(stat.reps);
+
+            return acc;
+        }, {});
+
+        const blockList = (Object.values(blocks) as BlockGroup[]).sort((a, b) => a.startTime - b.startTime);
+
+        const formatClock = (seconds: number) => {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        };
 
         const extractNumber = (str: string) => {
             const cleanStr = str.includes('|') ? str.split('|')[1].trim() : str;
@@ -955,28 +991,40 @@ export default function MainApp() {
                             <Activity className="w-3 h-3 text-yellow-400" />
                             Log de Ejercicios
                         </h3>
-                        <div className="flex-1 overflow-hidden flex flex-col gap-1.5">
-                            {exerciseList.map((exercise, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ x: 15, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.5 + idx * 0.04 }}
-                                    className="flex items-center gap-2 bg-white/3 border border-white/5 rounded-lg px-3 py-2.5 flex-1"
-                                >
-                                    <h4 className="text-white font-bold text-[12px] leading-tight flex-1 min-w-0 truncate">{exercise.title}</h4>
-                                    <span className="text-zinc-500 text-[10px] font-bold shrink-0">{exercise.series}S</span>
-                                    {Array.from(exercise.reps).length > 0 && (
-                                        <span className="text-yellow-200/60 text-[10px] font-semibold shrink-0">{Array.from(exercise.reps).join('/')}</span>
-                                    )}
-                                    {Array.from(exercise.weights).length > 0 && (
-                                        <span className="text-zinc-500 text-[10px] font-semibold shrink-0">{(() => { const w = Array.from(exercise.weights)[0]; return w.includes('|') ? w.split('|')[1].trim() : w; })()}</span>
-                                    )}
-                                    <div className="text-emerald-400 font-black text-[11px] tabular-nums shrink-0 flex items-center gap-0.5">
-                                        <Clock className="w-2.5 h-2.5" />
-                                        {formatTime(exercise.duration)}
+                        <div className="flex-1 overflow-y-auto pr-1 space-y-4">
+                            {blockList.map((block, bIdx) => (
+                                <div key={bIdx} className="space-y-1.5">
+                                    <div className="flex justify-between items-center px-1">
+                                        <h4 className="text-[10px] font-black text-yellow-500/70 uppercase tracking-widest">{block.name}</h4>
+                                        <span className="text-[10px] font-bold text-zinc-600 tabular-nums bg-white/5 px-2 py-0.5 rounded-full">
+                                            {formatClock(block.startTime)} — {formatClock(block.endTime)}
+                                        </span>
                                     </div>
-                                </motion.div>
+                                    <div className="flex flex-col gap-1">
+                                        {Object.values(block.exercises).map((exercise, idx) => (
+                                            <motion.div
+                                                key={idx}
+                                                initial={{ x: 15, opacity: 0 }}
+                                                animate={{ x: 0, opacity: 1 }}
+                                                transition={{ delay: 0.5 + idx * 0.04 }}
+                                                className="flex items-center gap-2 bg-white/3 border border-white/5 rounded-lg px-3 py-2 flex-1"
+                                            >
+                                                <h4 className="text-white font-bold text-[12px] leading-tight flex-1 min-w-0 truncate">{exercise.title}</h4>
+                                                <span className="text-zinc-500 text-[10px] font-bold shrink-0">{exercise.series}S</span>
+                                                {Array.from(exercise.reps).length > 0 && (
+                                                    <span className="text-yellow-200/60 text-[10px] font-semibold shrink-0">{Array.from(exercise.reps).join('/')}</span>
+                                                )}
+                                                {Array.from(exercise.weights).length > 0 && (
+                                                    <span className="text-zinc-500 text-[10px] font-semibold shrink-0">{(() => { const w = Array.from(exercise.weights)[0]; return w.includes('|') ? w.split('|')[1].trim() : w; })()}</span>
+                                                )}
+                                                <div className="text-emerald-400 font-black text-[11px] tabular-nums shrink-0 flex items-center gap-0.5">
+                                                    <Clock className="w-2.5 h-2.5" />
+                                                    {formatTime(exercise.duration)}
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     </div>
