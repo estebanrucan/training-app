@@ -658,6 +658,18 @@ export default function MainApp() {
 
                             <h2 className="text-xl font-bold text-zinc-500 uppercase tracking-[0.2em]">Descanso</h2>
 
+                            {step.phrase && (
+                                <motion.p
+                                    key={stepIndex}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="text-lg font-bold text-yellow-400/90 text-center px-4 leading-snug"
+                                >
+                                    {step.phrase}
+                                </motion.p>
+                            )}
+
                             {step.nextExercise && (
                                 <div className="glass-card rounded-2xl p-4 w-full text-left mt-2">
                                     <div className="text-zinc-500 text-[10px] font-bold uppercase tracking-[0.15em] mb-2 flex items-center gap-2">
