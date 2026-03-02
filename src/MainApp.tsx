@@ -36,6 +36,7 @@ export default function MainApp() {
     const timerRef = useRef<number | null>(null);
     const workoutStartTimeRef = useRef<number | null>(null);
     const exerciseStartTimeRef = useRef<number | null>(null);
+    const lastSpokenStepRef = useRef<number | null>(null);
 
     // Live clock
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -214,6 +215,38 @@ export default function MainApp() {
             return () => clearInterval(interval);
         }
     }, [screen]);
+
+    // Text to speech effect
+    useEffect(() => {
+        if (screen === 'workout' && !isPauseMenuOpen && !showEditSheet) {
+            if (lastSpokenStepRef.current !== stepIndex) {
+                const routine = routines[selectedDay];
+                const step = routine[stepIndex];
+                let text = '';
+
+                if (step.type === 'exercise') {
+                    text = step.notes;
+                } else if (step.type === 'rest') {
+                    text = step.phrase || '';
+                    if (step.nextExercise) {
+                        text += `. Siguiente ejercicio: ${step.nextExercise}`;
+                    }
+                }
+
+                if (text && window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'es-ES';
+                    utterance.rate = 1.0;
+                    window.speechSynthesis.speak(utterance);
+                }
+                lastSpokenStepRef.current = stepIndex;
+            }
+        } else if (screen !== 'workout') {
+            lastSpokenStepRef.current = null;
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        }
+    }, [screen, stepIndex, selectedDay, isPauseMenuOpen, showEditSheet]);
 
     // Rest timer effect
     useEffect(() => {
